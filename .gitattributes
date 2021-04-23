@@ -1,4 +1,4 @@
-*.py linguist-detectable=true
-*.css linguist-detectable=false
-*.js linguist-detectable=false
-*.java linguist-detectable=false
+static/* linguist-vendored
+staticfiles/* linguist-vendored
+templates/* linguist-vendored
+frontend/* linguist-vendored
