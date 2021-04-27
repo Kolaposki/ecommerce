@@ -55,6 +55,40 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+def new_home(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
+    setting = Setting.objects.get(pk=1)
+    products_latest = Product.objects.all().order_by('-id')[:3]  # last 3 products
+    # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+
+    if defaultlang != currentlang:
+        setting = SettingLang.objects.get(lang=currentlang)
+        products_latest = Product.objects.raw(
+            'SELECT p.id,p.price, l.title, l.description,l.slug  '
+            'FROM product_product as p '
+            'LEFT JOIN product_productlang as l '
+            'ON p.id = l.product_id '
+            'WHERE  l.lang=%s ORDER BY p.id DESC LIMIT 4', [currentlang])
+
+    products_slider = Product.objects.all().order_by('id')[:3]  # first 3 products
+
+    products_picked = Product.objects.all().order_by('?')[:3]  # Random selected 3 products
+
+    page = "home"
+    context = {'setting': setting,
+               'page': page,
+               'products_slider': products_slider,
+               'products_latest': products_latest,
+               'products_picked': products_picked,
+               # 'category':category
+               }
+    return render(request, 'home.html', context)
+
+
 def selectlanguage(request):
     if request.method == 'POST':  # check post
         cur_language = translation.get_language()
@@ -208,7 +242,7 @@ def product_detail(request, id, slug):
         context.update({'sizes': sizes, 'colors': colors,
                         'variant': variant, 'query': query
                         })
-    return render(request, 'product_detail.html', context)
+    return render(request, 'single-product.html', context)
 
 
 def ajaxcolor(request):
@@ -240,10 +274,6 @@ def faq(request):
         'faq': faq,
     }
     return render(request, 'faq.html', context)
-
-
-def new_home(request):
-    return render(request, 'home.html')
 
 
 def selectcurrency(request):

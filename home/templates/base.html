@@ -23,6 +23,10 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}">
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{% static '' %}css/font-awesome.min.css">
+
     <!-- Material Design Iconic Font -->
     <link rel="stylesheet" href="{% static 'css/vendor/material-design-iconic-font.css' %}">
     <!-- Simple Line Icons -->
@@ -40,14 +44,14 @@
     <!-- Timecircles -->
     <link rel="stylesheet" href="{% static 'css/plugins/timecircles.css' %}">
 
-{#    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">#}
-    <link type="text/css" rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">
 
 </head>
 
 <body class="template-color-2 font-family-01">
 
-<div class="main-wrapper">
+<div class="main-wrapper {% block wrapper_type %} {% endblock wrapper_type %}">
 
     <!-- Begin Loading Area -->
     <div class="loading">
@@ -63,7 +67,7 @@
     {% include 'partials/header.html' %}
     <!-- Main Header Area End Here -->
 
-    {% block body %} {% endblock %}
+    {% block body %} {% endblock body %}
 
     <!-- Begin Footer Area -->
     {% include 'partials/footer.html' %}
@@ -89,16 +93,20 @@
                                     "asNavFor": ".sp-img_slider-nav"
                                     }'>
                                     <div class="single-slide red">
-                                        <img src="{% static 'images/product/large-size/1.jpg' %}" alt="Quicky's Product Image">
+                                        <img src="{% static 'images/product/large-size/1.jpg' %}"
+                                             alt="Quicky's Product Image">
                                     </div>
                                     <div class="single-slide orange">
-                                        <img src="{% static 'images/product/large-size/2.jpg' %}" alt="Quicky's Product Image">
+                                        <img src="{% static 'images/product/large-size/2.jpg' %}"
+                                             alt="Quicky's Product Image">
                                     </div>
                                     <div class="single-slide brown">
-                                        <img src="{% static 'images/product/large-size/3.jpg' %}" alt="Quicky's Product Image">
+                                        <img src="{% static 'images/product/large-size/3.jpg' %}"
+                                             alt="Quicky's Product Image">
                                     </div>
                                     <div class="single-slide umber">
-                                        <img src="{% static 'images/product/large-size/4.jpg' %}" alt="Quicky's Product Image">
+                                        <img src="{% static 'images/product/large-size/4.jpg' %}"
+                                             alt="Quicky's Product Image">
                                     </div>
                                 </div>
                                 <div class="quicky-element-carousel sp-img_slider-nav arrow-style arrow-sm_size arrow-day_color"
