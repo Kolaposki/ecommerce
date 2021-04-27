@@ -40,59 +40,58 @@ def index(request):
             'ON p.id = l.product_id '
             'WHERE  l.lang=%s ORDER BY p.id DESC LIMIT 4', [currentlang])
 
-    products_slider = Product.objects.all().order_by('id')[:4]  #first 4 products
+    products_slider = Product.objects.all().order_by('id')[:4]  # first 4 products
 
+    products_picked = Product.objects.all().order_by('?')[:4]  # Random selected 4 products
 
-    products_picked = Product.objects.all().order_by('?')[:4]   #Random selected 4 products
-
-    page="home"
-    context={'setting':setting,
-             'page':page,
-             'products_slider': products_slider,
-             'products_latest': products_latest,
-             'products_picked': products_picked,
-             #'category':category
-             }
-    return render(request,'index.html',context)
-
-
+    page = "home"
+    context = {'setting': setting,
+               'page': page,
+               'products_slider': products_slider,
+               'products_latest': products_latest,
+               'products_picked': products_picked,
+               # 'category':category
+               }
+    return render(request, 'index.html', context)
 
 
 def selectlanguage(request):
     if request.method == 'POST':  # check post
         cur_language = translation.get_language()
-        lasturl= request.META.get('HTTP_REFERER')
+        lasturl = request.META.get('HTTP_REFERER')
         lang = request.POST['language']
         translation.activate(lang)
-        request.session[translation.LANGUAGE_SESSION_KEY]=lang
-        #return HttpResponse(lang)
-        return HttpResponseRedirect("/"+lang)
+        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+        # return HttpResponse(lang)
+        return HttpResponseRedirect("/" + lang)
+
 
 def aboutus(request):
-    #category = categoryTree(0,'',currentlang)
+    # category = categoryTree(0,'',currentlang)
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     setting = Setting.objects.get(pk=1)
     if defaultlang != currentlang:
         setting = SettingLang.objects.get(lang=currentlang)
 
-    context={'setting':setting}
+    context = {'setting': setting}
     return render(request, 'about.html', context)
+
 
 def contactus(request):
     currentlang = request.LANGUAGE_CODE[0:2]
-    #category = categoryTree(0,'',currentlang)
-    if request.method == 'POST': # check post
+    # category = categoryTree(0,'',currentlang)
+    if request.method == 'POST':  # check post
         form = ContactForm(request.POST)
         if form.is_valid():
-            data = ContactMessage() #create relation with model
-            data.name = form.cleaned_data['name'] # get form input data
+            data = ContactMessage()  # create relation with model
+            data.name = form.cleaned_data['name']  # get form input data
             data.email = form.cleaned_data['email']
             data.subject = form.cleaned_data['subject']
             data.message = form.cleaned_data['message']
             data.ip = request.META.get('REMOTE_ADDR')
-            data.save()  #save data to table
-            messages.success(request,"Your message has ben sent. Thank you for your message.")
+            data.save()  # save data to table
+            messages.success(request, "Your message has ben sent. Thank you for your message.")
             return HttpResponseRedirect('/contact')
 
     defaultlang = settings.LANGUAGE_CODE[0:2]
@@ -102,14 +101,15 @@ def contactus(request):
         setting = SettingLang.objects.get(lang=currentlang)
 
     form = ContactForm
-    context={'setting':setting,'form':form  }
+    context = {'setting': setting, 'form': form}
     return render(request, 'contactus.html', context)
 
-def category_products(request,id,slug):
+
+def category_products(request, id, slug):
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     catdata = Category.objects.get(pk=id)
-    products = Product.objects.filter(category_id=id) #default language
+    products = Product.objects.filter(category_id=id)  # default language
     if defaultlang != currentlang:
         try:
             products = Product.objects.raw(
@@ -122,28 +122,31 @@ def category_products(request,id,slug):
             pass
         catdata = CategoryLang.objects.get(category_id=id, lang=currentlang)
 
-    context={'products': products,
-             #'category':category,
-             'catdata':catdata }
-    return render(request,'category_products.html',context)
+    context = {'products': products,
+               # 'category':category,
+               'catdata': catdata}
+    return render(request, 'category_products.html', context)
+
 
 def search(request):
-    if request.method == 'POST': # check post
+    if request.method == 'POST':  # check post
         form = SearchForm(request.POST)
         if form.is_valid():
-            query = form.cleaned_data['query'] # get form input data
+            query = form.cleaned_data['query']  # get form input data
             catid = form.cleaned_data['catid']
-            if catid==0:
-                products=Product.objects.filter(title__icontains=query)  #SELECT * FROM product WHERE title LIKE '%query%'
+            if catid == 0:
+                products = Product.objects.filter(
+                    title__icontains=query)  # SELECT * FROM product WHERE title LIKE '%query%'
             else:
-                products = Product.objects.filter(title__icontains=query,category_id=catid)
+                products = Product.objects.filter(title__icontains=query, category_id=catid)
 
             category = Category.objects.all()
-            context = {'products': products, 'query':query,
-                       'category': category }
+            context = {'products': products, 'query': query,
+                       'category': category}
             return render(request, 'search_products.html', context)
 
     return HttpResponseRedirect('/')
+
 
 def search_auto(request):
     if request.is_ajax():
@@ -153,7 +156,7 @@ def search_auto(request):
         results = []
         for rs in products:
             product_json = {}
-            product_json = rs.title +" > " + rs.category.title
+            product_json = rs.title + " > " + rs.category.title
             results.append(product_json)
         data = json.dumps(results)
     else:
@@ -161,49 +164,52 @@ def search_auto(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
-def product_detail(request,id,slug):
+
+def product_detail(request, id, slug):
     query = request.GET.get('q')
     # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
-    defaultlang = settings.LANGUAGE_CODE[0:2] #en-EN
+    defaultlang = settings.LANGUAGE_CODE[0:2]  # en-EN
     currentlang = request.LANGUAGE_CODE[0:2]
-    #category = categoryTree(0, '', currentlang)
+    # category = categoryTree(0, '', currentlang)
     category = Category.objects.all()
 
     product = Product.objects.get(pk=id)
 
     if defaultlang != currentlang:
         try:
-            prolang =  Product.objects.raw('SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
-                                          'FROM product_product as p '
-                                          'INNER JOIN product_productlang as l '
-                                          'ON p.id = l.product_id '
-                                          'WHERE p.id=%s and l.lang=%s',[id,currentlang])
-            product=prolang[0]
+            prolang = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'INNER JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.id=%s and l.lang=%s', [id, currentlang])
+            product = prolang[0]
         except:
             pass
     # <<<<<<<<<< M U L T I   L A N G U G A E <<<<<<<<<<<<<<< end
 
     images = Images.objects.filter(product_id=id)
-    comments = Comment.objects.filter(product_id=id,status='True')
-    context = {'product': product,'category': category,
+    comments = Comment.objects.filter(product_id=id, status='True')
+    context = {'product': product, 'category': category,
                'images': images, 'comments': comments,
                }
-    if product.variant !="None": # Product have variants
-        if request.method == 'POST': #if we select color
+    if product.variant != "None":  # Product have variants
+        if request.method == 'POST':  # if we select color
             variant_id = request.POST.get('variantid')
-            variant = Variants.objects.get(id=variant_id) #selected product by click color radio
-            colors = Variants.objects.filter(product_id=id,size_id=variant.size_id )
-            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
-            query += variant.title+' Size:' +str(variant.size) +' Color:' +str(variant.color)
+            variant = Variants.objects.get(id=variant_id)  # selected product by click color radio
+            colors = Variants.objects.filter(product_id=id, size_id=variant.size_id)
+            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id', [id])
+            query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color)
         else:
             variants = Variants.objects.filter(product_id=id)
-            colors = Variants.objects.filter(product_id=id,size_id=variants[0].size_id )
-            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
-            variant =Variants.objects.get(id=variants[0].id)
+            colors = Variants.objects.filter(product_id=id, size_id=variants[0].size_id)
+            sizes = Variants.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id', [id])
+            variant = Variants.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
-                        'variant': variant,'query': query
+                        'variant': variant, 'query': query
                         })
-    return render(request,'product_detail.html',context)
+    return render(request, 'product_detail.html', context)
+
 
 def ajaxcolor(request):
     data = {}
@@ -225,15 +231,19 @@ def faq(request):
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
 
-    if defaultlang==currentlang:
-        faq = FAQ.objects.filter(status="True",lang=defaultlang).order_by("ordernumber")
+    if defaultlang == currentlang:
+        faq = FAQ.objects.filter(status="True", lang=defaultlang).order_by("ordernumber")
     else:
-        faq = FAQ.objects.filter(status="True",lang=currentlang).order_by("ordernumber")
+        faq = FAQ.objects.filter(status="True", lang=currentlang).order_by("ordernumber")
 
     context = {
         'faq': faq,
     }
     return render(request, 'faq.html', context)
+
+
+def new_home(request):
+    return render(request, 'home.html')
 
 
 def selectcurrency(request):
@@ -242,13 +252,14 @@ def selectcurrency(request):
         request.session['currency'] = request.POST['currency']
     return HttpResponseRedirect(lasturl)
 
-@login_required(login_url='/login') # Check login
+
+@login_required(login_url='/login')  # Check login
 def savelangcur(request):
     lasturl = request.META.get('HTTP_REFERER')
     curren_user = request.user
-    language=Language.objects.get(code=request.LANGUAGE_CODE[0:2])
-    #Save to User profile database
-    data = UserProfile.objects.get(user_id=curren_user.id )
+    language = Language.objects.get(code=request.LANGUAGE_CODE[0:2])
+    # Save to User profile database
+    data = UserProfile.objects.get(user_id=curren_user.id)
     data.language_id = language.id
     data.currency_id = request.session['currency']
     data.save()  # save data
