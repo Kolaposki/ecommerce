@@ -1,0 +1,139 @@
+{% load static %}
+
+<div class="product-tab_area pt-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="sp-product-tab_nav">
+                    <div class="product-tab">
+                        <ul class="nav product-menu">
+                            <li><a class="active" data-toggle="tab" href="#description"><span>Description</span></a>
+                            </li>
+                            <li><a data-toggle="tab"
+                                   href="#reviews"><span>Reviews ({{ product.countreview }})</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-content uren-tab_content">
+                        <div id="description" class="tab-pane active show" role="tabpanel">
+                            <div class="product-description">
+                                <ul>
+                                    <li>
+                                        {{ product.detail |safe }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="reviews" class="tab-pane" role="tabpanel">
+                            <div class="tab-pane active" id="tab-review">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <form class="form-horizontal" id="form-review"
+                                      action="/product/addcomment/{{ product.id }}" method="post">
+                                    {% csrf_token %}
+
+                                    <div id="review">
+
+                                        <table class="table table-striped table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <td style="width: 50%;"><strong>Customer</strong></td>
+                                                <td class="text-right">20/02/20</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <p>Good product! Thank you very much</p>
+                                                    <div class="rating-box">
+                                                        <ul>
+                                                            <li><i class="zmdi zmdi-star"></i></li>
+                                                            <li><i class="zmdi zmdi-star"></i></li>
+                                                            <li><i class="zmdi zmdi-star"></i></li>
+                                                            <li><i class="zmdi zmdi-star"></i></li>
+                                                            <li><i class="zmdi zmdi-star"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        {% for rs in comments %}
+
+                                            <table class="table table-striped table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <td style="width: 50%;"><strong>{{ rs.user.first_name }}</strong>
+                                                    </td>
+                                                    <td class="text-right">{{ rs.create_at }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <p>{{ rs.comment }}</p>
+                                                        <div class="rating-box">
+                                                            <i class="fa fa-star{% if rs.rate < 1 %}-o empty{% endif %}"></i>
+                                                            <i class="fa fa-star{% if rs.rate < 2 %}-o empty{% endif %}"></i>
+                                                            <i class="fa fa-star{% if rs.rate < 3 %}-o empty{% endif %}"></i>
+                                                            <i class="fa fa-star{% if rs.rate < 4 %}-o empty{% endif %}"></i>
+                                                            <i class="fa fa-star{% if rs.rate < 5 %}-o empty{% endif %}"></i>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        {% endfor %}
+
+                                    </div>
+
+
+                                    <h2>Write a review</h2>
+
+                                    <div class="form-group required">
+                                        <div class="col-sm-12 p-0">
+                                            <label class="control-label">Share your opinion</label>
+                                            <textarea class="review-textarea plr-10" name="comment"
+                                                      id="con_message"></textarea>
+                                            {#                                            <div class="help-block"><span class="text-danger">Note:</span> HTML is#}
+                                            {#                                                not#}
+                                            {#                                                translated!#}
+                                            {#                                            </div>#}
+                                        </div>
+                                    </div>
+                                    <div class="form-group last-child required">
+                                        <div class="col-sm-12 p-0">
+                                            <div class="your-opinion">
+                                                <label>Your Rating</label>
+                                                <div class="rating-box">
+                                                    <ul>
+                                                        <li><i class="zmdi zmdi-star"></i></li>
+                                                        <li><i class="zmdi zmdi-star"></i></li>
+                                                        <li><i class="zmdi zmdi-star"></i></li>
+                                                        <li><i class="zmdi zmdi-star"></i></li>
+                                                        <li><i class="zmdi zmdi-star"></i></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if user.id is not None %}
+                                            <div class="quicky-btn-ps_right">
+                                                <button class="quicky-btn-2 square-btn">Submit</button>
+                                            </div>
+                                        {% else %}
+                                            <div class="help-block"><span class="text-danger">Note:</span> You must be
+                                                logged in to post a review
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
