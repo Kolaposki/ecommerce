@@ -6,7 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db.models import Avg, Count, Q, F
 from django.db.models.functions import Concat
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
+# from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -18,6 +19,8 @@ from home.forms import SearchForm
 from home.models import Setting, ContactForm, ContactMessage, FAQ, SettingLang, Language
 from mysite import settings
 from product.models import Category, Product, Images, Comment, Variants, ProductLang, CategoryLang
+from order.models import ShopCart
+
 from user.models import UserProfile
 
 
@@ -52,6 +55,7 @@ def index(request):
                'products_picked': products_picked,
                # 'category':category
                }
+
     return render(request, 'index.html', context)
 
 
@@ -78,14 +82,27 @@ def new_home(request):
 
     products_picked = Product.objects.all().order_by('?')[:3]  # Random selected 3 products
 
+    category = Category.objects.all()
+    current_user = request.user  # Access User Session information
+    shop_cart = ShopCart.objects.filter(user_id=current_user.id)
+    total = 0
+    for rs in shop_cart:
+        total += rs.product.price * rs.quantity
+    # return HttpResponse(str(total))
+
     page = "home"
     context = {'setting': setting,
                'page': page,
                'products_slider': products_slider,
                'products_latest': products_latest,
                'products_picked': products_picked,
-               # 'category':category
+               'shopcart': shop_cart,
+               'category': category,
+               'total': total,
                }
+
+    print("context: ", context)
+
     return render(request, 'home.html', context)
 
 

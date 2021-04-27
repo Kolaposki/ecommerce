@@ -77,18 +77,10 @@
                     <div class="col-lg-7">
                         <div class="sp-content ml-lg-4">
                             <div class="sp-heading">
-                                <h5><a href="#">{{ product.title }}</a></h5>
+                                <h3><a href="javascript:void(0)">{{ product.title }}</a></h3>
                             </div>
-                            {#                        <span class="reference">Reference: demo_1</span>#}
+                                                    <span class="reference">Reference: demo_1</span>
                             <div class="rating-box">
-                                {#                            <ul>#}
-                                {#                                <li><i class="zmdi zmdi-star"></i></li>#}
-                                {#                                <li><i class="zmdi zmdi-star"></i></li>#}
-                                {#                                <li><i class="zmdi zmdi-star"></i></li>#}
-                                {#                                <li class="silver-color"><i class="zmdi zmdi-star"></i></li>#}
-                                {#                                <li class="silver-color"><i class="zmdi zmdi-star"></i></li>#}
-                                {##}
-                                {#                            </ul>#}
                                 <i class="fa fa-star{% if product.avaregereview < 1 %}-o empty{% endif %}"></i>
                                 <i class="fa fa-star{% if product.avaregereview < 2 %}-o empty{% endif %}"></i>
                                 <i class="fa fa-star{% if product.avaregereview < 3 %}-o empty{% endif %}"></i>
