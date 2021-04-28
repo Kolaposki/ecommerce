@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load currency %}
+
+{% block title %} Shop Cart {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+{% block body %}
+
+    <!-- Begin Quicky's Cart Area -->
+    <div class="quicky-cart-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="javascript:void(0)">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="quicky-product-remove">remove</th>
+                                    <th class="quicky-product-thumbnail">images</th>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="quicky-product-price">Unit Price</th>
+                                    <th class="quicky-product-quantity">Quantity</th>
+                                    <th class="quicky-product-subtotal">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for rs in shopcart %}
+
+                                    <tr>
+                                        <td class="quicky-product-remove"><a href="/order/deletefromcart/{{ rs.id }}"
+                                                                             onclick="return confirm('Delete ! Are you sure?')"><i
+                                                class="zmdi zmdi-close"
+                                                title="Remove"></i></a></td>
+                                        <td class="quicky-product-thumbnail"><a href="javascript:void(0)"><img
+                                                src="{{ rs.variant.image }}"
+                                                alt="Cart Thumbnail"></a>
+                                        </td>
+                                        <td class="quicky-product-name"><a
+                                                href="javascript:void(0)">{{ rs.product }}</a>
+                                        </td>
+                                        <td class="quicky-product-price"><span
+                                                class="amount"> {% if rs.product.variant == 'None' %}
+                                            {{ rs.product.price|currency:request.session.currency }}
+                                            {{ request.session.currency }}
+                                        {% else %}
+                                            {{ rs.variant.price|currency:request.session.currency }}
+                                            {{ request.session.currency }}
+                                        {% endif %}</span></td>
+                                        <td class="quantity">
+                                            <label>Quantity</label>
+                                            <div class="cart-plus-minus">
+                                                <input class="cart-plus-minus-box" value="{{ rs.quantity }}"
+                                                       type="text">
+                                                <div class="dec qtybutton"><i class="zmdi zmdi-chevron-down"></i></div>
+                                                <div class="inc qtybutton"><i class="zmdi zmdi-chevron-up"></i></div>
+                                            </div>
+                                        </td>
+                                        <td class="product-subtotal"><span class="amount">$
+                                            {% if rs.product.variant == 'None' %}
+                                                {{ rs.amount|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                            {% else %}
+                                                {{ rs.varamount|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                            {% endif %}</span></td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="coupon-all">
+                                    <div class="coupon">
+                                        <input id="coupon_code" class="input-text" name="coupon_code" value=""
+                                               placeholder="Coupon code" type="text">
+                                        <input class="button mt-xxs-30" name="apply_coupon" value="Apply coupon"
+                                               type="submit">
+                                    </div>
+                                    <div class="coupon2">
+                                        <input class="button" name="update_cart" value="Update cart" type="submit">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-5 ml-auto">
+                                <div class="cart-page-total">
+                                    <h2>Cart totals</h2>
+                                    <ul>
+                                        <li>Subtotal
+                                            <span>{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                        </li>
+                                        <li>Shipping <span>Free Shipping</span></li>
+                                        <li>Total
+                                            <span>{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                        </li>
+                                    </ul>
+                                    <a href="{% url 'orderproduct' %}">Proceed to checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quicky's Cart Area End Here -->
+
+{% endblock body %}

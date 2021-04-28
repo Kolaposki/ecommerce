@@ -51,10 +51,10 @@
             <span class="ammount">{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
         </div>
         <div class="minicart-btn_area">
-            <a href="cart.html" class="quicky-btn-2 quicky-btn_fullwidth square-btn">Minicart</a>
+            <a href="{% url 'shopcart' %}" class="quicky-btn-2 quicky-btn_fullwidth square-btn">Minicart</a>
         </div>
         <div class="minicart-btn_area">
-            <a href="checkout.html" class="quicky-btn-2 quicky-btn_fullwidth square-btn">Checkout</a>
+            <a href="{% url 'orderproduct' %}" class="quicky-btn-2 quicky-btn_fullwidth square-btn">Checkout</a>
         </div>
     </div>
 </div>
