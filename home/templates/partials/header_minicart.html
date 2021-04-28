@@ -11,18 +11,6 @@
             </div>
             <ul class="minicart-list">
 
-                <li class="minicart-product">
-                    <a class="product-item_remove" href="javascript:void(0)"><i
-                            class="zmdi zmdi-close"></i></a>
-                    <div class="product-item_img">
-                        <img src="{% static 'images/product/small-size/1.jpg' %}" alt="Quicky's Product Image">
-                    </div>
-                    <div class="product-item_content">
-                        <a class="product-item_title" href="shop-left-sidebar.html">Autem ipsa ad</a>
-                        <span class="product-item_quantity">1 x $145.80</span>
-                    </div>
-                </li>
-
                 {% for rs in shopcart %}
                     <li class="minicart-product">
                         <a class="product-item_remove" href="/order/deletefromcart/{{ rs.id }}"

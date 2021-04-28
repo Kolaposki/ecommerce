@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %} Order Completed {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+{% block wrapper_type %} "wrapper-boxed_layout" {% endblock wrapper_type %}
+
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <h2>Other</h2>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Success</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="error404-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 ml-auto mr-auto text-center">
+                <div class="search-error-wrapper">
+                    <h2 style="color: #0cbc15;">ORDER COMPLETED</h2>
+                    <h2>Dear {{ user.first_name }} {{ user.last_name }}</h2>
+
+                    <p class="short_desc">The order was completed successfully</p>
+                    <p class="short_desc">Order Code : {{ ordercode }}</p>
+                    <p class="short_desc">Thank You</p>
+
+                    <hr>
+                    <hr>
+
+                    <div class="btn-ps_center"></div>
+                    <a href="index.html" class="error-btn">Back To Home Page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

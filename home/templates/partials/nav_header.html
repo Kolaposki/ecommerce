@@ -1,0 +1,86 @@
+{% load static %}
+
+<nav class="main-nav d-flex justify-content-center">
+    <ul>
+        <li class="dropdown-holder"><a href="{% url 'new_home' %}">New Arrivals</a>
+        </li>
+        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Men</a>
+        </li>
+        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Women</a>
+        </li>
+        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Kids</a>
+        </li>
+        <li class="megamenu-holder position-static"><a
+                href="shop-left-sidebar.html">Brands</a>
+            <div class="quicky-megamenu_wrap">
+                <ul class="quicky-megamenu">
+                    <li><span class="megamenu-title"><a href="">Shoe</a></span>
+                        <ul>
+                            <li><a href="">Jordan</a></li>
+                            <li><a href="">Christian Dior</a></li>
+                            <li><a href="">Addidas</a></li>
+                            <li><a href="">Puma</a></li>
+                            <li><a href="">Balenciaga</a></li>
+                            <li><a href="">Nike</a></li>
+                            <li><a href="">Prada</a></li>
+                            <li><a href="">Isabel Marant</a></li>
+
+                        </ul>
+                    </li>
+                    <li><span class="megamenu-title"><a href="">Clothing</a></span>
+                        <ul>
+                            <li><a href="">Ashluxe</a></li>
+                            <li><a href="">Gucci</a></li>
+                            <li><a href="">Versace</a></li>
+                            <li><a href="">Essence</a></li>
+                            <li><a href="">Valentino</a></li>
+                            <li><a href="">Off-White</a></li>
+
+                        </ul>
+                    </li>
+                    <li><span class="megamenu-title"><a href="">Bags</a></span>
+                        <ul>
+                            <li><a href="">Balenciaga</a></li>
+                            <li><a href="">Fendi</a></li>
+                            <li><a href="">Givenchy</a></li>
+                            <li><a href="">Saint Laurent</a></li>
+                            <li><a href="">Versace</a></li>
+                            <li><a href="">Burberry</a></li>
+
+                        </ul>
+                    </li>
+                    <li><span class="megamenu-title"><a href="">Jewellery</a></span>
+                        <ul>
+                            <li><a href="">Gucci</a></li>
+                            <li><a href="">Repossi</a></li>
+                            <li><a href="">Anissa Kermiche</a></li>
+                            <li><a href="">Timeless Pearly</a></li>
+
+                        </ul>
+                    </li>
+                    <li><span class="megamenu-title"><a href="">Accessories</a></span>
+                        <ul>
+                            <li><a href="">Valentino</a></li>
+                            <li><a href="">Versace</a></li>
+                            <li><a href="">Fendi</a></li>
+                            <li><a href="">Givenchy</a></li>
+                            <li><a href="">Saint Laurent</a></li>
+                            <li><a href="">Dolce & Gabbana</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+                <div class="main-menu_bg">
+                    <img src="{% static 'images/menu/bg/1.jpg' %}" alt="Main Menu Images">
+                </div>
+            </div>
+        </li>
+        <li><a href="javascript:void(0)">Pages</a>
+            <ul class="quicky-dropdown">
+                <li><a href="about-us.html">About Us</a></li>
+                <li><a href="error-404.html">Error 404</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
