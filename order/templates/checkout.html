@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load currency %}
+
+{% block title %} Check Out{% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+{% block wrapper_type %} "wrapper-boxed_layout" {% endblock wrapper_type %}
+
+{% block body %}
+
+    <!-- Begin Quicky's Checkout Area -->
+    <div class="checkout-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="coupon-accordion">
+                        <h3>Have a coupon? <span id="showcoupon">Click here to enter your code</span></h3>
+                        <div id="checkout_coupon" class="coupon-checkout-content">
+                            <div class="coupon-info">
+                                <form action="javascript:void(0)">
+                                    <p class="checkout-coupon">
+                                        <input placeholder="Coupon code" type="text">
+                                        <input class="coupon-inner_btn" value="Apply Coupon" type="submit">
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-6 col-12">
+
+                    {% include 'partials/checkout_form.html' %}
+
+                </div>
+
+                <div class="col-lg-6 col-12">
+                    <div class="your-order">
+                        <h3>Your order</h3>
+                        <div class="your-order-table table-responsive">
+
+                            {% include 'partials/checkout_table.html' %}
+                        </div>
+                        <div class="payment-method">
+                            <div class="payment-accordion">
+                                <div id="accordion">
+                                    <div class="card">
+                                        <div class="card-header" id="#payment-1">
+                                            <h5 class="panel-title">
+                                                <a href="javascript:void(0)" class="" data-toggle="collapse"
+                                                   data-target="#collapseOne" aria-expanded="true"
+                                                   aria-controls="collapseOne">
+                                                    Direct Bank Transfer.
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <p>Make your payment directly into our bank account. Please use your
+                                                    Order
+                                                    ID as the payment
+                                                    reference. Your order won’t be shipped until the funds have
+                                                    cleared in
+                                                    our account.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="#payment-2">
+                                            <h5 class="panel-title">
+                                                <a href="javascript:void(0)" class="collapsed"
+                                                   data-toggle="collapse" data-target="#collapseTwo"
+                                                   aria-expanded="false" aria-controls="collapseTwo">
+                                                    Cheque Payment
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <p>Make your payment directly into our bank account. Please use your
+                                                    Order
+                                                    ID as the payment
+                                                    reference. Your order won’t be shipped until the funds have
+                                                    cleared in
+                                                    our account.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="#payment-3">
+                                            <h5 class="panel-title">
+                                                <a href="javascript:void(0)" class="collapsed"
+                                                   data-toggle="collapse" data-target="#collapseThree"
+                                                   aria-expanded="false" aria-controls="collapseThree">
+                                                    PayPal
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseThree" class="collapse" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <p>Make your payment directly into our bank account. Please use your
+                                                    Order
+                                                    ID as the payment
+                                                    reference. Your order won’t be shipped until the funds have
+                                                    cleared in
+                                                    our account.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+{#                                <div class="order-button-payment">#}
+{#                                    <input value="Place order" type="submit">#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Quicky's Checkout Area End Here -->
+
+
+{% endblock body %}

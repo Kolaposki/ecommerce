@@ -97,9 +97,9 @@ def deletefromcart(request, id):
 def orderproduct(request):
     category = Category.objects.all()
     current_user = request.user
-    shopcart = ShopCart.objects.filter(user_id=current_user.id)
+    shop_cart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
-    for rs in shopcart:
+    for rs in shop_cart:
         if rs.product.variant == 'None':
             total += rs.product.price * rs.quantity
         else:
@@ -125,7 +125,7 @@ def orderproduct(request):
             data.code = ordercode
             data.save()  #
 
-            for rs in shopcart:
+            for rs in shop_cart:
                 detail = OrderProduct()
                 detail.order_id = data.id  # Order Id
                 detail.product_id = rs.product_id
@@ -159,10 +159,10 @@ def orderproduct(request):
 
     form = OrderForm()
     profile = UserProfile.objects.get(user_id=current_user.id)
-    context = {'shopcart': shopcart,
+    context = {'shopcart': shop_cart,
                'category': category,
                'total': total,
                'form': form,
                'profile': profile,
                }
-    return render(request, 'Order_Form.html', context)
+    return render(request, 'checkout.html', context)
