@@ -176,7 +176,7 @@ def category_products(request, id, slug):
     context = {'products': products,
                # 'category':category,
                'catdata': catdata}
-    return render(request, 'category_products.html', context)
+    return render(request, 'shop-category.html', context)
 
 
 def search(request):
