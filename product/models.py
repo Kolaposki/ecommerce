@@ -36,7 +36,7 @@ class Brand(MPTTModel):
         order_insertion_by = ['title']
 
     def get_absolute_url(self):
-        return reverse('brand_detail', kwargs={'id': self.pk, 'slug': self.slug})
+        return reverse('brand_products', kwargs={'id': self.pk, 'slug': self.slug})
 
     def __str__(self):
         return self.title
@@ -95,6 +95,7 @@ class Product(models.Model):
         ('Size-Color', 'Size-Color'),
 
     )
+
     title = models.CharField(max_length=150)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)  # many to one relation with Brand
@@ -130,6 +131,9 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('category_detail', kwargs={'slug': self.slug})
+
+    def get_discount_percentage(self):
+        return f'-{self.discount_percentage}%'
 
     def avaregereview(self):
         reviews = Comment.objects.filter(product=self, status='True').aggregate(avarage=Avg('rate'))

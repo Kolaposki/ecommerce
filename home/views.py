@@ -22,6 +22,7 @@ from product.models import *
 from order.models import ShopCart
 
 from user.models import UserProfile
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -178,10 +179,30 @@ def category_products(request, id, slug):
     return render(request, 'shop-category.html', context)
 
 
+
+
 def men_products(request):
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     products = Product.objects.filter(sex='Male')
+    all_brands = []
+
+    for product in products:
+        # reverse lookup
+        if product.brand:
+            all_brands.append(product.brand)
+
+    top_brands = set(all_brands)
+    total = len(products)
+    next_page = False
+
+    top_tags = Product.tags.most_common()[:7]
+
+    if total > 21:
+        next_page = True
+
+    products = products[0:21]
+
     if defaultlang != currentlang:
         try:
             products = Product.objects.raw(
@@ -193,7 +214,8 @@ def men_products(request):
         except:
             pass
 
-    context = {'products': products, }
+    context = {'products': products, "is_brand": False, 'category': 'Men', 'next_page': next_page, 'total': total,
+               'top_tags': top_tags, 'top_brands': top_brands}
     return render(request, 'shop-category.html', context)
 
 
@@ -212,7 +234,7 @@ def women_products(request):
         except:
             pass
 
-    context = {'products': products, }
+    context = {'products': products, "is_brand": False, 'category': 'Women'}
     return render(request, 'shop-category.html', context)
 
 
@@ -231,7 +253,7 @@ def kids_products(request):
         except:
             pass
 
-    context = {'products': products, }
+    context = {'products': products, "is_brand": False, 'category': 'Kids'}
     return render(request, 'shop-category.html', context)
 
 
@@ -253,7 +275,7 @@ def brand_products(request, id, slug):
         brand_data = CategoryLang.objects.get(category_id=id, lang=currentlang)
 
     context = {'products': products,
-               'catdata': brand_data}
+               'catdata': brand_data, "is_brand": True}
     return render(request, 'shop-category.html', context)
 
 
