@@ -10,6 +10,20 @@
 {% block keywords %} {{ setting.keywords }} {% endblock %}
 {% block body %}
 
+    <div class="breadcrumb-area"
+         style="background-image: url({% static 'images/banner/store_bg.jpg' %});">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2 style="color: white;">SHOP CART</h2>
+                <ul style="color: white;">
+                    <li><a href="{% url 'new_home' %}" style="color: white;">Home</a></li>
+                    <li class="active" style="color: white;">Shopcart</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Begin Quicky's Cart Area -->
     <div class="quicky-cart-area">
         <div class="container">

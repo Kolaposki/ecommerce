@@ -349,7 +349,7 @@
                 showNotification("Added to cart", "success");
 
                 $('#minicartSection').html(response.html_from_view)
-                $("p.total-price").text(response.count)
+                $("p#totalPrice").text(response.count)
 
             },
             error: function (e) {
@@ -400,7 +400,7 @@
                 showNotification("Removed from cart", "success");
 
                 $('#minicartSection').html(response.html_from_view)
-                $("p.total-price").text(response.count)
+                $("p#totalPrice").text(response.count)
 
             },
             error: function (e) {

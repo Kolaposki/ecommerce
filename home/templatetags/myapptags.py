@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from mysite import settings
 from order.models import ShopCart
-from product.models import Category
+from product.models import Category, Wishlist
 
 register = template.Library()
 
@@ -17,6 +17,12 @@ def categorylist():
 @register.simple_tag
 def shopcartcount(userid):
     count = ShopCart.objects.filter(user_id=userid).count()
+    return count
+
+
+@register.simple_tag
+def wishlistcount(userid):
+    count = Wishlist.objects.filter(user_id=userid).count()
     return count
 
 

@@ -14,10 +14,20 @@
         </a>
     </li>
     <li class="minicart-wrap mr-md_0">
+        <a href="{% url 'wishlist' %}" class="toolbar-btn">
+            <div class="minicart-count_area">
+                <i class="zmdi zmdi-favorite-outline"></i>
+                <p class="total-price" id="totalWish">{% load myapptags %}
+                    {% wishlistcount user.id as count %}
+                    {{ count }}</p>
+            </div>
+        </a>
+    </li>
+    <li class="minicart-wrap mr-md_0">
         <a href="#miniCart" class="minicart-btn toolbar-btn">
             <div class="minicart-count_area">
                 <i class="zmdi zmdi-mall"></i>
-                <p class="total-price">{% load myapptags %}
+                <p class="total-price" id="totalPrice">{% load myapptags %}
                     {% shopcartcount user.id as count %}
                     {{ count }}</p>
             </div>

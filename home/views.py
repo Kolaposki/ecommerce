@@ -60,6 +60,14 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+def wishlist(request):
+    products = Wishlist.objects.filter(user_id=request.user.id)
+    print("wishlist_pro: ", products)
+
+    context = {'wishlists': products, }
+    return render(request, 'wishlist.html', context)
+
+
 def new_home(request):
     if not request.session.has_key('currency'):
         request.session['currency'] = settings.DEFAULT_CURRENCY
@@ -103,7 +111,6 @@ def new_home(request):
                'category': category,
                'total': total,
                }
-
 
     return render(request, 'home.html', context)
 
