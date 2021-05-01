@@ -27,6 +27,11 @@ def allshopcart(userid):
 
 
 @register.simple_tag
+def multiply(value, arg):
+    return value * arg
+
+
+@register.simple_tag
 def allshopcartprice(userid):
     shop_cart = ShopCart.objects.filter(user_id=userid)
     total = 0

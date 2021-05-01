@@ -4,6 +4,7 @@
 {% load i18n %}
 {% load currency %}
 
+
 {% block title %} Shop Cart {% endblock %}
 {% block description %} {{ setting.description }} {% endblock %}
 {% block keywords %} {{ setting.keywords }} {% endblock %}
@@ -36,20 +37,23 @@
                                                 class="zmdi zmdi-close"
                                                 title="Remove"></i></a></td>
                                         <td class="quicky-product-thumbnail"><a href="javascript:void(0)"><img
-                                                src="{{ rs.variant.image }}"
-                                                alt="Cart Thumbnail"></a>
+                                                src="{{ rs.product.image.url }}" height="129px" width="129px"
+                                                alt="{{ rs.product }}"></a>
                                         </td>
                                         <td class="quicky-product-name"><a
                                                 href="javascript:void(0)">{{ rs.product }}</a>
                                         </td>
                                         <td class="quicky-product-price"><span
-                                                class="amount"> {% if rs.product.variant == 'None' %}
-                                            {{ rs.product.price|currency:request.session.currency }}
-                                            {{ request.session.currency }}
-                                        {% else %}
-                                            {{ rs.variant.price|currency:request.session.currency }}
-                                            {{ request.session.currency }}
-                                        {% endif %}</span></td>
+                                                class="amount">
+                                            {% if rs.product.discount_price %}
+                                                {{ rs.product.discount_price|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                                {% else %}{{ rs.product.price|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                            {% endif %}
+
+                                        </span>
+                                        </td>
                                         <td class="quantity">
                                             <label>Quantity</label>
                                             <div class="cart-plus-minus">
@@ -59,14 +63,24 @@
                                                 <div class="inc qtybutton"><i class="zmdi zmdi-chevron-up"></i></div>
                                             </div>
                                         </td>
+
                                         <td class="product-subtotal"><span class="amount">$
-                                            {% if rs.product.variant == 'None' %}
-                                                {{ rs.amount|currency:request.session.currency }}
-                                                {{ request.session.currency }}
-                                            {% else %}
-                                                {{ rs.varamount|currency:request.session.currency }}
-                                                {{ request.session.currency }}
-                                            {% endif %}</span></td>
+                                            {% with quantity=rs.quantity %}
+                                                {% load myapptags %}
+
+                                                {% if rs.product.discount_price %}
+                                                    {% multiply rs.product.discount_price quantity %} {{ request.session.currency }}
+                                                    {% else %}{% multiply rs.product.price quantity %} {{ request.session.currency }}
+                                                {% endif %}
+                                                {##}
+                                                {#                                                {% if rs.product.variant == 'None' %}#}
+                                                {#                                                    {{ rs.amount|currency:request.session.currency }}#}
+                                                {#                                                    {{ request.session.currency }}#}
+                                                {#                                                {% else %}#}
+                                                {#                                                    {{ rs.varamount|currency:request.session.currency }}#}
+                                                {#                                                    {{ request.session.currency }}#}
+                                                {#                                                {% endif %}#}
+                                            {% endwith %}</span></td>
                                     </tr>
                                 {% endfor %}
 
