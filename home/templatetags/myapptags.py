@@ -32,12 +32,10 @@ def allshopcartprice(userid):
     total = 0
     for rs in shop_cart:
         if rs.product.discount_price:
-            print("discpount present: ", rs.product.discount_price, " --- ", rs.product.price)
             total += rs.product.discount_price * rs.quantity
         else:
             total += rs.product.price * rs.quantity
 
-    print("total: ", total)
     return total
 
 

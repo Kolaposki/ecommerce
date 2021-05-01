@@ -86,11 +86,12 @@ def new_home(request):
     category = Category.objects.all()
     current_user = request.user  # Access User Session information
     shop_cart = ShopCart.objects.filter(user_id=current_user.id)
-    print("shop_cart: ", shop_cart)
     total = 0
     for rs in shop_cart:
-        total += rs.product.price * rs.quantity
-    # return HttpResponse(str(total))
+        if rs.product.discount_price:
+            total += rs.product.discount_price * rs.quantity
+        else:
+            total += rs.product.price * rs.quantity
 
     page = "home"
     context = {'setting': setting,
@@ -103,7 +104,6 @@ def new_home(request):
                'total': total,
                }
 
-    print("context: ", context)
 
     return render(request, 'home.html', context)
 

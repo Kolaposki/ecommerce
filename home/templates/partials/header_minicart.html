@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% load currency %}
+{% load myapptags %}
 
 <div class="offcanvas-minicart_wrapper" id="miniCart">
     <div class="offcanvas-menu-inner">
@@ -10,12 +11,21 @@
                 <h4>Shopping Cart</h4>
             </div>
             <ul class="minicart-list">
+                {% if not shopcart %}
+                    {% if not user.id %}
+                        {% allshopcart user_pk as shopcart %}
+                        {% allshopcartprice user_pk as total %}
+                    {% else %}
+                        {% allshopcart user.id as shopcart %}
+                        {% allshopcartprice user.id as total %}
+                    {% endif %}
+                {% endif %}
 
                 {% for rs in shopcart %}
                     <li class="minicart-product">
-                        <a class="product-item_remove" href="/order/deletefromcart/{{ rs.id }}"
-                           onclick="return confirm('Delete ! Are you sure?')"><i
-                                class="zmdi zmdi-close"></i></a>
+                        <a class="product-item_remove" data-pk="{{ rs.id }}" href="#">
+                            <i class="zmdi zmdi-close " id="cart-remover" data-pk="{{ rs.id }}"></i>
+                        </a>
                         <div class="product-item_img">
                             <img src="{{ rs.product.image.url }}" alt="Quicky's Product Image">
                         </div>
@@ -23,9 +33,10 @@
                             <a class="product-item_title"
                                href="/product/{{ rs.product.id }}/{{ rs.product.slug }}">{{ rs.product }}</a>
                             <span class="product-item_quantity">{{ rs.quantity }} x
-                                {% if rs.discount_price %}{{ rs.discount_price|currency:request.session.currency }}
+                                {% if rs.product.discount_price %}
+                                    {{ rs.product.discount_price|currency:request.session.currency }}
                                     {{ request.session.currency }}
-                                    {% else %}{{ rs.price|currency:request.session.currency }}
+                                    {% else %}{{ rs.product.price|currency:request.session.currency }}
                                     {{ request.session.currency }}
                                 {% endif %}
                             </span>
