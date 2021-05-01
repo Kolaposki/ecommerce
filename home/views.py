@@ -18,7 +18,7 @@ from django.utils import translation
 from home.forms import SearchForm
 from home.models import Setting, ContactForm, ContactMessage, FAQ, SettingLang, Language
 from mysite import settings
-from product.models import Category, Product, Images, Comment, Variants, ProductLang, CategoryLang
+from product.models import *
 from order.models import ShopCart
 
 from user.models import UserProfile
@@ -174,8 +174,86 @@ def category_products(request, id, slug):
         catdata = CategoryLang.objects.get(category_id=id, lang=currentlang)
 
     context = {'products': products,
-               # 'category':category,
                'catdata': catdata}
+    return render(request, 'shop-category.html', context)
+
+
+def men_products(request):
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+    products = Product.objects.filter(sex='Male')
+    if defaultlang != currentlang:
+        try:
+            products = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'LEFT JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.category_id=%s and l.lang=%s', [id, currentlang])
+        except:
+            pass
+
+    context = {'products': products, }
+    return render(request, 'shop-category.html', context)
+
+
+def women_products(request):
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+    products = Product.objects.filter(sex='Female')
+    if defaultlang != currentlang:
+        try:
+            products = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'LEFT JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.category_id=%s and l.lang=%s', [id, currentlang])
+        except:
+            pass
+
+    context = {'products': products, }
+    return render(request, 'shop-category.html', context)
+
+
+def kids_products(request):
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+    products = Product.objects.filter(sex='for_kids')
+    if defaultlang != currentlang:
+        try:
+            products = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'LEFT JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.category_id=%s and l.lang=%s', [id, currentlang])
+        except:
+            pass
+
+    context = {'products': products, }
+    return render(request, 'shop-category.html', context)
+
+
+def brand_products(request, id, slug):
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+    brand_data = Brand.objects.get(pk=id)
+    products = Product.objects.filter(brand_id=id)  # default language
+    if defaultlang != currentlang:
+        try:
+            products = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'LEFT JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.category_id=%s and l.lang=%s', [id, currentlang])
+        except:
+            pass
+        brand_data = CategoryLang.objects.get(category_id=id, lang=currentlang)
+
+    context = {'products': products,
+               'catdata': brand_data}
     return render(request, 'shop-category.html', context)
 
 

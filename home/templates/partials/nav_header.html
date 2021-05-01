@@ -4,17 +4,17 @@
     <ul>
         <li class="dropdown-holder"><a href="{% url 'new_home' %}">New Arrivals</a>
         </li>
-        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Men</a>
+        <li class="dropdown-holder"><a href="{% url 'men_products' %}">Men</a>
         </li>
-        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Women</a>
+        <li class="dropdown-holder"><a href="{% url 'women_products' %}">Women</a>
         </li>
-        <li class="dropdown-holder"><a href="{% url 'new_home' %}">Kids</a>
+        <li class="dropdown-holder"><a href="{% url 'kids_products' %}">Kids</a>
         </li>
         <li class="megamenu-holder position-static"><a
                 href="shop-left-sidebar.html">Brands</a>
             <div class="quicky-megamenu_wrap">
                 <ul class="quicky-megamenu">
-                    <li><span class="megamenu-title"><a href="">Shoe</a></span>
+                    <li><span class="megamenu-title"><a href="{% url 'category_products' 4 'shoe' %}">Shoe</a></span>
                         <ul>
                             <li><a href="">Jordan</a></li>
                             <li><a href="">Christian Dior</a></li>
@@ -35,7 +35,6 @@
                             <li><a href="">Essence</a></li>
                             <li><a href="">Valentino</a></li>
                             <li><a href="">Off-White</a></li>
-
                         </ul>
                     </li>
                     <li><span class="megamenu-title"><a href="">Bags</a></span>

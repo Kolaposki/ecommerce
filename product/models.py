@@ -35,8 +35,8 @@ class Brand(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['title']
 
-    # def get_absolute_url(self):
-    #     return reverse('category_detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('brand_detail', kwargs={'id': self.pk, 'slug': self.slug})
 
     def __str__(self):
         return self.title
@@ -61,7 +61,7 @@ class Category(MPTTModel):
         order_insertion_by = ['title']
 
     def get_absolute_url(self):
-        return reverse('category_detail', kwargs={'slug': self.slug})
+        return reverse('category_detail', kwargs={'id': self.pk, 'slug': self.slug})
 
     def __str__(self):  # __str__ method elaborated later in
         full_path = [self.title]  # post.  use __unicode__ in place of
@@ -99,6 +99,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)  # many to one relation with Brand
     wishlisted = models.BooleanField(default=False, blank=True, null=True)
+    for_kids = models.BooleanField(default=False, blank=True, null=True)
     tags = TaggableManager(blank=True)
     keywords = models.CharField(max_length=255)
     # description = models.TextField(max_length=255)
