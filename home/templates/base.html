@@ -66,6 +66,29 @@
     <!-- Begin Main Header Area -->
     {% include 'partials/header.html' %}
     <!-- Main Header Area End Here -->
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+
+                $.notify(
+                    {
+                        icon: "zmdi zmdi-lamp",
+                        message: `<span class='ml-3'>{{ message }}</span>`,
+                    },
+                    {
+                        type: '{% if message.tags == 'error' %}danger{% else %}{{ message.tags }} {% endif %}',
+                        delay: 500,
+                        timer: 3500,
+                        placement: {
+                            from: 'top',
+                            align: 'right',
+                        },
+                    }
+                );
+
+            {% endfor %}
+        </script>
+    {% endif %}
 
     {% block body %} {% endblock body %}
 
@@ -280,7 +303,8 @@
 <!-- Slick Slider JS -->
 <script src="{% static 'js/plugins/slick.min.js' %}"></script>
 
-<script src="{% static 'js/plugins/notify.min.js' %}"></script>
+<script src="{% static 'js/plugins/bootstrap-notify.js' %}"></script>
+
 <!-- Barrating JS -->
 <script src="{% static 'js/plugins/jquery.barrating.min.js' %}"></script>
 <!-- Counterup JS -->
@@ -305,6 +329,7 @@
 <script src="{% static 'js/main.js' %}"></script>
 
 <script>
+    let REMOVED_PRODUCT_FLAG;
     $('.addToCartBtn').click(function (e) {
         e.preventDefault()
         console.log('Added to cart click')
@@ -321,13 +346,14 @@
             success: function (response) {
                 console.log("Added to cart ", product_pk);
                 console.log("response ", response);
-                // showNotification("Liked", "info");
+                showNotification("Added to cart", "success");
 
                 $('#minicartSection').html(response.html_from_view)
                 $("p.total-price").text(response.count)
 
             },
             error: function (e) {
+                showNotification("Error ocuured when adding to cart", "danger");
                 console.log("Error ocuured when liking contact");
                 console.log(e)
             }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
@@ -336,11 +362,62 @@
 
     });
 
+    $('.product-item_remove').click(function (e) {
+        e.preventDefault()
+        // Todo: confirm('Delete ! Are you sure?')
+
+        console.log('Remove from cart click')
+        let product = $(this)[0]
+        console.log('product_pk: ', product.getAttribute("data-pk"))
+        let product_pk = product.getAttribute("data-pk")
+        cartRemover(product_pk)
+
+    });
+
+    function cartRemover(product_pk) {
+        console.log("cartRemover call")
+        $('.mobile-menu .sub-menu').slideUp();
+        $('.mobile-menu .menu-item-has-children').removeClass('menu-open');
+        $('.btn-close').parents('.open').removeClass('open');
+
+        if (REMOVED_PRODUCT_FLAG === product_pk) {
+            console.log("flag was clicked b4")
+            return
+        }
+        REMOVED_PRODUCT_FLAG = true
+
+
+        $.ajax({
+            type: "GET",
+            url: '/order/delete_from_cart_ajax/',
+            data: {
+                product_id: product_pk
+            },
+            success: function (response) {
+
+                console.log("Removed from cart ", product_pk);
+                console.log("response ", response);
+                showNotification("Removed from cart", "success");
+
+                $('#minicartSection').html(response.html_from_view)
+                $("p.total-price").text(response.count)
+
+            },
+            error: function (e) {
+                showNotification("Error ocuured when removing to cart", "danger");
+                console.log("Error ocuured when removing");
+                console.log(e)
+            }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+        });
+        REMOVED_PRODUCT_FLAG = product_pk
+
+    }
 
     function showNotification(message, type) {
         $.notify(
             {
-                icon: "nc-icon nc-bulb-63",
+                icon: "zmdi zmdi-lamp",
                 message: `<span class='ml-3'>${message}</span>`,
             },
             {
@@ -356,46 +433,11 @@
     }
 
     document.addEventListener('click', function (e) {
-        if (e.target.id === 'notes') {
-            let contact_card = e.target.parentElement.parentElement;
-            if (contact_card.classList.contains('contact-card')) {
-                contact_card.classList.toggle("is-flipped");
-            }
+        if (e.target.id === 'cart-remover') {
+            console.log("cart-remover", e.target)
+            let product_pk = e.target.getAttribute("data-pk")
+            cartRemover(product_pk)
         }
-
-        if (e.target.id === 'addToCartBtn') {
-            e.preventDefault()
-            {#e.target.classList.toggle("fa-heart");#}
-            {#e.target.classList.toggle("fa-heart-o");#}
-            console.log('Added to cart')
-            let $target = $(e.target)
-            let parent = $target.parents("div[data-pk]")
-            console.log('Parne: ', parent)
-
-            /**
-             let id, likeUrl;
-             id = e.target.getAttribute("data-catid");
-             likeUrl = e.target.getAttribute("data-url");
-             $.ajax({
-                type: "GET",
-                url: likeUrl,
-                data: {
-                    contact_id: id
-                },
-                success: function (data) {
-                    // console.log("Liked contact id ", id);
-                    // showNotification("Liked", "info");
-                },
-                error: function (e) {
-                    showNotification("Liked not recorded! Please check your internet connection", "danger");
-                    console.log("Error ocuured when liking contact");
-                    console.log(e)
-                }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
-
-            });
-             */
-        }
-
 
     });
 

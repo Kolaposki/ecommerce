@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
 # Create your views here.
 from django.utils.crypto import get_random_string
@@ -81,7 +82,8 @@ def add_to_cart_ajax(request):
         product_id = request.GET['product_id']
         product = Product.objects.get(pk=product_id)
 
-        checkinproduct = ShopCart.objects.filter(product_id=product_id, user_id=int(current_user.id))  # Check product in shopcart
+        checkinproduct = ShopCart.objects.filter(product_id=product_id,
+                                                 user_id=int(current_user.id))  # Check product in shopcart
         if checkinproduct:
             control = 1  # The product is in the cart
         else:
@@ -99,7 +101,24 @@ def add_to_cart_ajax(request):
             data.variant_id = None
             data.save()
 
-        return HttpResponse('success')
+        all_shop_cart = ShopCart.objects.filter(user_id=int(current_user.id))
+        total = 0
+        for rs in all_shop_cart:
+            if rs.product.discount_price:
+                total += rs.product.discount_price * rs.quantity
+            else:
+                total += rs.product.price * rs.quantity
+
+        html = render_to_string(
+            template_name="partials/header_minicart.html",
+            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id)}
+        )
+
+        count = all_shop_cart.count()
+        data_dict = {"html_from_view": html, 'count': count}
+        return JsonResponse(data=data_dict, safe=False)
+
+        # return HttpResponse('success')
     else:
         return HttpResponseBadRequest('Unrecognized request')
 
@@ -124,6 +143,34 @@ def deletefromcart(request, id):
     ShopCart.objects.filter(id=id).delete()
     messages.success(request, "Your item deleted form Shopcart.")
     return HttpResponseRedirect("/shopcart")
+
+
+@login_required(login_url='/login')  # Check login
+def delete_from_cart_ajax(request):
+    if request.method == 'GET' and request.is_ajax():
+
+        current_user = request.user  # Access User Session information
+        product_id = request.GET['product_id']
+        ShopCart.objects.filter(id=product_id).delete()
+
+        all_shop_cart = ShopCart.objects.filter(user_id=int(current_user.id))
+        total = 0
+        for rs in all_shop_cart:
+            if rs.product.discount_price:
+                total += rs.product.discount_price * rs.quantity
+            else:
+                total += rs.product.price * rs.quantity
+
+        html = render_to_string(
+            template_name="partials/header_minicart.html",
+            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id)}
+        )
+
+        count = all_shop_cart.count()
+        data_dict = {"html_from_view": html, 'count': count}
+        return JsonResponse(data=data_dict, safe=False)
+    else:
+        return HttpResponseBadRequest('Unrecognized request')
 
 
 def orderproduct(request):
