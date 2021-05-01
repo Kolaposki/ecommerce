@@ -9,8 +9,37 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from taggit.managers import TaggableManager
 
 from home.models import Language
+
+from django.db.utils import OperationalError
+
+
+class Brand(MPTTModel):
+    STATUS = (
+        ('True', 'True'),
+        ('False', 'False'),
+    )
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    keywords = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(blank=True, upload_to='images/')
+    status = models.CharField(max_length=10, choices=STATUS)
+    slug = models.SlugField(null=False, unique=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['title']
+
+    # def get_absolute_url(self):
+    #     return reverse('category_detail', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return self.title
 
 
 class Category(MPTTModel):
@@ -21,7 +50,7 @@ class Category(MPTTModel):
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     keywords = models.CharField(max_length=255)
-    description = models.TextField(max_length=255)
+    description = models.TextField()
     image = models.ImageField(blank=True, upload_to='images/')
     status = models.CharField(max_length=10, choices=STATUS)
     slug = models.SlugField(null=False, unique=True)
@@ -42,11 +71,21 @@ class Category(MPTTModel):
             k = k.parent
         return ' / '.join(full_path[::-1])
 
+    class Meta:
+        verbose_name_plural = "Categories"
+        verbose_name = "Category"
+
 
 class Product(models.Model):
     STATUS = (
         ('True', 'True'),
         ('False', 'False'),
+    )
+
+    SEX = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Unisex', 'Unisex'),
     )
 
     VARIANTS = (
@@ -56,20 +95,27 @@ class Product(models.Model):
         ('Size-Color', 'Size-Color'),
 
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
     title = models.CharField(max_length=150)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)  # many to one relation with Brand
+    wishlisted = models.BooleanField(default=False, blank=True, null=True)
+    tags = TaggableManager(blank=True)
     keywords = models.CharField(max_length=255)
-    description = models.TextField(max_length=255)
+    # description = models.TextField(max_length=255)
     image = models.ImageField(upload_to='images/', null=False)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    amount = models.IntegerField(default=0)
-    minamount = models.IntegerField(default=3)
+    # amount = models.IntegerField(default=0)
+    # minamount = models.IntegerField(default=3)
+
+    sex = models.CharField(max_length=6, choices=SEX, default='Unisex', blank=False, null=False)
     variant = models.CharField(max_length=10, choices=VARIANTS, default='None')
     detail = RichTextUploadingField()
     slug = models.SlugField(null=False, unique=True)
-    status = models.CharField(max_length=10, choices=STATUS)
+    status = models.CharField(max_length=10, choices=STATUS, default='True')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    discount_percentage = models.IntegerField(default=0)
+    discount_price = models.DecimalField(max_digits=12, decimal_places=2, default=0, editable=False)
 
     def __str__(self):
         return self.title
@@ -97,6 +143,13 @@ class Product(models.Model):
         if reviews["count"] is not None:
             cnt = int(reviews["count"])
         return cnt
+
+    def save(self, *args, **kwargs):
+        if self.discount_percentage > 1:
+            self.discount_price = float((self.discount_percentage / 100)) * float(self.price)
+            super(Product, self).save(*args, **kwargs)
+
+        super(Product, self).save(*args, **kwargs)
 
 
 class Images(models.Model):
@@ -184,11 +237,15 @@ class Variants(models.Model):
             return ""
 
 
-llist = Language.objects.all()
-list1 = []
-for rs in llist:
-    list1.append((rs.code, rs.name))
-langlist = (list1)
+try:
+    llist = Language.objects.filter(status=True)
+    list1 = []
+    for rs in llist:
+        list1.append((rs.code, rs.name))
+    langlist = (list1)
+except OperationalError:
+    #  no such table: home_language
+    langlist = None
 
 
 class ProductLang(models.Model):
@@ -215,3 +272,14 @@ class CategoryLang(models.Model):
 
     def get_absolute_url(self):
         return reverse('category_detail', kwargs={'slug': self.slug})
+
+
+class Wishlist(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.contact.title} "
+
+    class Meta:
+        verbose_name_plural = "Wishlists"
+        verbose_name = "Wishlist"

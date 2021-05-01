@@ -6,6 +6,8 @@ from django.forms import ModelForm, TextInput, Textarea
 from django.http import request
 from django.utils.safestring import mark_safe
 
+from django.db.utils import OperationalError
+
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
@@ -18,11 +20,15 @@ class Language(models.Model):
         return self.name
 
 
-llist = Language.objects.filter(status=True)
-list1 = []
-for rs in llist:
-    list1.append((rs.code, rs.name))
-langlist = (list1)
+try:
+    llist = Language.objects.filter(status=True)
+    list1 = []
+    for rs in llist:
+        list1.append((rs.code, rs.name))
+    langlist = (list1)
+except OperationalError:
+    #  no such table: home_language
+    langlist = None
 
 
 class Setting(models.Model):
@@ -56,7 +62,6 @@ class Setting(models.Model):
 
     def __str__(self):
         return self.title
-
 
 
 class SettingLang(models.Model):
