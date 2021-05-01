@@ -279,6 +279,8 @@
 
 <!-- Slick Slider JS -->
 <script src="{% static 'js/plugins/slick.min.js' %}"></script>
+
+<script src="{% static 'js/plugins/notify.min.js' %}"></script>
 <!-- Barrating JS -->
 <script src="{% static 'js/plugins/jquery.barrating.min.js' %}"></script>
 <!-- Counterup JS -->
@@ -309,11 +311,6 @@
         let parent = $(this).parents("div[data-pk]")[0]
         console.log('product_pk: ', parent.getAttribute("data-pk"))
         let product_pk = parent.getAttribute("data-pk")
-        let total_price = parseInt($("p.total-price").text())
-
-        console.log('total_price: ', total_price)
-        let new_count = parseInt(total_price) + 1
-        $("p.total-price").text(new_count)
 
         $.ajax({
             type: "GET",
@@ -321,9 +318,14 @@
             data: {
                 product_id: product_pk
             },
-            success: function (data) {
+            success: function (response) {
                 console.log("Added to cart ", product_pk);
+                console.log("response ", response);
                 // showNotification("Liked", "info");
+
+                $('#minicartSection').html(response.html_from_view)
+                $("p.total-price").text(response.count)
+
             },
             error: function (e) {
                 console.log("Error ocuured when liking contact");
@@ -333,6 +335,25 @@
         });
 
     });
+
+
+    function showNotification(message, type) {
+        $.notify(
+            {
+                icon: "nc-icon nc-bulb-63",
+                message: `<span class='ml-3'>${message}</span>`,
+            },
+            {
+                type: type,
+                delay: 2700,
+                timer: 1000,
+                placement: {
+                    from: 'top',
+                    align: 'right',
+                },
+            }
+        );
+    }
 
     document.addEventListener('click', function (e) {
         if (e.target.id === 'notes') {

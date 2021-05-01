@@ -86,6 +86,7 @@ def new_home(request):
     category = Category.objects.all()
     current_user = request.user  # Access User Session information
     shop_cart = ShopCart.objects.filter(user_id=current_user.id)
+    print("shop_cart: ", shop_cart)
     total = 0
     for rs in shop_cart:
         total += rs.product.price * rs.quantity
@@ -177,8 +178,6 @@ def category_products(request, id, slug):
     context = {'products': products,
                'catdata': catdata}
     return render(request, 'shop-category.html', context)
-
-
 
 
 def men_products(request):
