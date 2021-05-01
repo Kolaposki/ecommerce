@@ -99,7 +99,7 @@ class Product(models.Model):
     title = models.CharField(max_length=150)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)  # many to one relation with Brand
-    wishlisted = models.BooleanField(default=False, blank=True, null=True)
+    # wishlisted = models.BooleanField(default=False, blank=True, null=True)
     for_kids = models.BooleanField(default=False, blank=True, null=True)
     tags = TaggableManager(blank=True)
     keywords = models.CharField(max_length=255)
@@ -130,7 +130,7 @@ class Product(models.Model):
             return ""
 
     def get_absolute_url(self):
-        return reverse('category_detail', kwargs={'slug': self.slug})
+        return reverse('product_detail', kwargs={'id': self.pk, 'slug': self.slug})
 
     def get_discount_percentage(self):
         return f'-{self.discount_percentage}%'
