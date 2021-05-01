@@ -72,6 +72,38 @@ def addtoshopcart(request, id):
         return HttpResponseRedirect(url)
 
 
+@login_required(login_url='/login')  # Check login
+def add_to_cart_ajax(request):
+    if request.method == 'GET' and request.is_ajax():
+
+        current_user = request.user  # Access User Session information
+        print("current_user: ", current_user)
+        product_id = request.GET['product_id']
+        product = Product.objects.get(pk=product_id)
+
+        checkinproduct = ShopCart.objects.filter(product_id=product_id, user_id=int(current_user.id))  # Check product in shopcart
+        if checkinproduct:
+            control = 1  # The product is in the cart
+        else:
+            control = 0  # The product is not in the cart"""
+
+        if control == 1:  # Update  shopcart
+            data = ShopCart.objects.get(product_id=product_id, user=current_user)
+            data.quantity += 1
+            data.save()  #
+        else:  # Insert to Shopcart
+            data = ShopCart()  #
+            data.user_id = current_user.id
+            data.product_id = product_id
+            data.quantity = 1
+            data.variant_id = None
+            data.save()
+
+        return HttpResponse('success')
+    else:
+        return HttpResponseBadRequest('Unrecognized request')
+
+
 def shopcart(request):
     category = Category.objects.all()
     current_user = request.user  # Access User Session information

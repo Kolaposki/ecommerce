@@ -302,6 +302,84 @@
 <!-- Main JS -->
 <script src="{% static 'js/main.js' %}"></script>
 
+<script>
+    $('.addToCartBtn').click(function (e) {
+        e.preventDefault()
+        console.log('Added to cart click')
+        let parent = $(this).parents("div[data-pk]")[0]
+        console.log('product_pk: ', parent.getAttribute("data-pk"))
+        let product_pk = parent.getAttribute("data-pk")
+        let total_price = parseInt($("p.total-price").text())
+
+        console.log('total_price: ', total_price)
+        let new_count = parseInt(total_price) + 1
+        $("p.total-price").text(new_count)
+
+        $.ajax({
+            type: "GET",
+            url: '/order/add_to_cart_ajax/',
+            data: {
+                product_id: product_pk
+            },
+            success: function (data) {
+                console.log("Added to cart ", product_pk);
+                // showNotification("Liked", "info");
+            },
+            error: function (e) {
+                console.log("Error ocuured when liking contact");
+                console.log(e)
+            }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+        });
+
+    });
+
+    document.addEventListener('click', function (e) {
+        if (e.target.id === 'notes') {
+            let contact_card = e.target.parentElement.parentElement;
+            if (contact_card.classList.contains('contact-card')) {
+                contact_card.classList.toggle("is-flipped");
+            }
+        }
+
+        if (e.target.id === 'addToCartBtn') {
+            e.preventDefault()
+            {#e.target.classList.toggle("fa-heart");#}
+            {#e.target.classList.toggle("fa-heart-o");#}
+            console.log('Added to cart')
+            let $target = $(e.target)
+            let parent = $target.parents("div[data-pk]")
+            console.log('Parne: ', parent)
+
+            /**
+             let id, likeUrl;
+             id = e.target.getAttribute("data-catid");
+             likeUrl = e.target.getAttribute("data-url");
+             $.ajax({
+                type: "GET",
+                url: likeUrl,
+                data: {
+                    contact_id: id
+                },
+                success: function (data) {
+                    // console.log("Liked contact id ", id);
+                    // showNotification("Liked", "info");
+                },
+                error: function (e) {
+                    showNotification("Liked not recorded! Please check your internet connection", "danger");
+                    console.log("Error ocuured when liking contact");
+                    console.log(e)
+                }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+            });
+             */
+        }
+
+
+    });
+
+</script>
+
 
 </body>
 
