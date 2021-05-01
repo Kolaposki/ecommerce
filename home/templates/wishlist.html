@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load currency %}
+
+{% block title %} WishList {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+{% block body %}
+
+
+    <div class="breadcrumb-area"
+         style="background-image: url({% static 'images/banner/store_bg.jpg' %});">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2 style="color: white;">WISHLIST</h2>
+                <ul style="color: white;">
+                    <li><a href="{% url 'new_home' %}" style="color: white;">Home</a></li>
+                    <li class="active" style="color: white;">Wishlist</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--Begin Quicky's Wishlist Area -->
+    <div class="quicky-wishlist_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="javascript:void(0)">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="quicky-product_remove">remove</th>
+                                    <th class="quicky-product-thumbnail">images</th>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="quicky-product-price">Unit Price</th>
+                                    <th class="quicky-product-stock-status">Stock Status</th>
+                                    <th class="quicky-cart_btn">add to cart</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for rs in wishlists %}
+                                    <tr>
+                                        <td class="quicky-product-remove"><a href=""
+                                                                             onclick="return confirm('Delete ! Are you sure?')"><i
+                                                class="zmdi zmdi-close"
+                                                title="Remove"></i></a></td>
+                                        <td class="quicky-product-thumbnail"><a href="javascript:void(0)"><img
+                                                src="{{ rs.product.image.url }}" height="129px" width="129px"
+                                                alt="{{ rs.product }}"></a>
+                                        </td>
+                                        <td class="quicky-product-name"><a
+                                                href="{{ rs.product.get_absolute_url }}">{{ rs.product }}</a>
+                                        </td>
+                                        <td class="quicky-product-price"><span
+                                                class="amount">
+                                            {% if rs.product.discount_price %}
+                                                {{ rs.product.discount_price|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                                {% else %}{{ rs.product.price|currency:request.session.currency }}
+                                                {{ request.session.currency }}
+                                            {% endif %}
+
+                                        </span>
+                                        </td>
+                                        <td class="quicky-product-stock-status"><span class="in-stock">in stock</span>
+                                        </td>
+                                        <td class="quicky-cart_btn"><a href="javascript:void(0)">add to cart</a></td>
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quicky's Wishlist Area End Here -->
+
+{% endblock body %}
