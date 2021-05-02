@@ -342,7 +342,7 @@ def women_products(request):
 def kids_products(request):
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
-    products = Product.objects.filter(sex='for_kids')
+    products = Product.objects.filter(for_kids=True)
     if defaultlang != currentlang:
         try:
             products = Product.objects.raw(
