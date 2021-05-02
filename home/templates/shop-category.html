@@ -153,10 +153,21 @@
                                                                                              title="Quick View"><i
                                                             class="icon-magnifier"></i></a>
                                                     </li>
-                                                    <li><a href="wishlist.html" data-toggle="tooltip"
+                                                    <li>{% if rs.wishlisted %}
+                                                        <a href="#" class="actionWishlistBtn" data-wishlisted="true"
+                                                           data-toggle="tooltip"
                                                            data-placement="top"
-                                                           title="Add To Wishlist"><i
-                                                            class="icon-heart"></i></a>
+                                                           title="Remove from Wishlist">
+                                                            <i class="zmdi zmdi-favorite"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="#" class="actionWishlistBtn"
+                                                           data-toggle="tooltip"
+                                                           data-placement="top"
+                                                           title="Add To Wishlist">
+                                                            <i class="zmdi zmdi-favorite-outline"></i>
+                                                        </a>
+                                                    {% endif %}
                                                     </li>
                                                     <li><a href="compare.html" data-toggle="tooltip"
                                                            data-placement="top"
