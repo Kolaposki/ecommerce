@@ -68,6 +68,41 @@ def wishlist(request):
     return render(request, 'wishlist.html', context)
 
 
+@login_required(login_url='/login')  # Check login
+# Handles wishlisting of products in an asynchronous manner [AJAX]
+def wishlist_actions_ajax(request):
+    if request.method == 'GET' and request.is_ajax():
+
+        current_user = request.user  # Access User Session information
+        product_id = request.GET['product_id']
+        product = Product.objects.get(pk=product_id)
+        data_dict = {}
+
+        try:
+            wishlist_obj = Wishlist.objects.get(product=product)
+            print("wishlist_obj presnt: ", wishlist_obj)
+        except Wishlist.DoesNotExist:
+            print("wishlist_obj Absent: ")
+            wishlist_obj = Wishlist(user_id=int(current_user.id), product=product)
+            wishlist_obj.save()
+
+            print("Wishlisted objected", wishlist_obj)
+            print("Wishlisted: ", product.wishlisted)
+            count = Wishlist.objects.filter(user_id=int(current_user.id)).count()
+
+            data_dict = {'count': count, 'wishlisted': True}
+            return JsonResponse(data=data_dict, safe=False)
+
+        wishlist_obj.delete()
+
+        count = Wishlist.objects.filter(user_id=int(current_user.id)).count()
+        data_dict = {'count': count, 'wishlisted': False}
+        return JsonResponse(data=data_dict, safe=False)
+
+    else:
+        return HttpResponseBadRequest('Unrecognized request')
+
+
 def new_home(request):
     if not request.session.has_key('currency'):
         request.session['currency'] = settings.DEFAULT_CURRENCY

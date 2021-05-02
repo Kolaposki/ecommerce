@@ -330,6 +330,59 @@
 
 <script>
     let REMOVED_PRODUCT_FLAG;
+    $('.actionWishlistBtn').click(function (e) {
+        e.preventDefault()
+        console.log('wishlist click')
+
+        let wishlisted = $(this).attr('data-wishlisted')
+        console.log('data-wishlisted: ', wishlisted)
+
+        let $child = $(this).children('i')
+        console.log('$child: ', $child)
+
+        $child.toggleClass("zmdi zmdi-favorite");
+        $child.toggleClass("zmdi zmdi-favorite-outline");
+
+
+        let parent = $(this).parents("div[data-pk]")[0]
+        console.log('product_pk: ', parent.getAttribute("data-pk"))
+        let product_pk = parent.getAttribute("data-pk")
+
+        $.ajax({
+            type: "GET",
+            url: '/home/wishlist_actions_ajax/',
+            data: {
+                product_id: product_pk
+            },
+            success: function (response) {
+                if (wishlisted === 'true') {
+                    $(this).attr('data-wishlisted', '')
+                    $(this).attr('title', 'Add To Wishlist')
+                } else {
+                    $(this).attr('data-wishlisted', 'true')
+                    $(this).attr('title', 'Remove from Wishlist')
+
+                }
+
+                console.log("wishlisted success ", product_pk);
+                console.log("response ", response);
+                $("p#totalWish").text(response.count)
+                if (response.wishlisted) {
+                    showNotification("Added to wishlist", "success");
+                } else {
+                    showNotification("Removed from wishlist", "success");
+                }
+
+            },
+            error: function (e) {
+                showNotification("Error ocuured when wishlisting", "danger");
+                console.log("Error ocuured when wishlisting");
+                console.log(e)
+            }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+        });
+    });
+
     $('.addToCartBtn').click(function (e) {
         e.preventDefault()
         console.log('Added to cart click')

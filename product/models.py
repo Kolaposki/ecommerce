@@ -296,4 +296,4 @@ class Wishlist(models.Model):
 
     def delete(self, *args, **kwargs):
         Product.objects.filter(pk=self.product.pk).update(wishlisted=False)
-        super(Image, self).delete(*args, **kwargs)
+        super(Wishlist, self).delete(*args, **kwargs)
