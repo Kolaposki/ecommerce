@@ -1,0 +1,10 @@
+<li class="minicart-wrap mr-md_0">
+        <a href="{% url 'wishlist' %}" id="wishlistBtn" class="toolbar-btn" data-nogo="true">
+            <div class="minicart-count_area">
+                <i class="zmdi zmdi-favorite-outline"></i>
+                <p class="total-price" id="totalWish">{% load myapptags %}
+                    {% wishlistcount user.id as count %}
+                    {{ count }}</p>
+            </div>
+        </a>
+    </li>
