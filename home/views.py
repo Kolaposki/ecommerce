@@ -71,6 +71,7 @@ def wishlist(request):
 def new_home(request):
     if not request.session.has_key('currency'):
         request.session['currency'] = settings.DEFAULT_CURRENCY
+        print("No currency", request.session['currency'])
 
     setting = Setting.objects.get(pk=1)
     products_latest = Product.objects.all().order_by('-id')[:3]  # last 3 products

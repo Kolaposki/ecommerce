@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% load currency %}
+{% currency_context %}
 {% load myapptags %}
 
 <div class="offcanvas-minicart_wrapper" id="miniCart">
@@ -13,8 +14,14 @@
             <ul class="minicart-list">
                 {% if not shopcart %}
                     {% if not user.id %}
-                        {% allshopcart user_pk as shopcart %}
-                        {% allshopcartprice user_pk as total %}
+                        {% if user_pk %}
+                            {% allshopcart user_pk as shopcart %}
+                            {% allshopcartprice user_pk as total %}
+                        {% else %}
+                            {% allshopcart request.user.pk as shopcart %}
+                            {% allshopcartprice request.user.pk as total %}
+                        {% endif %}
+
                     {% else %}
                         {% allshopcart user.id as shopcart %}
                         {% allshopcartprice user.id as total %}
