@@ -118,12 +118,12 @@ class ImagesAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'status', 'image_tag', 'brand', 'sex']
+    list_display = ['title', 'category', 'status', 'price', 'image_tag', 'brand', 'sex']
     list_filter = ['category', 'brand', 'sex']
-    readonly_fields = ('image_tag', 'wishlisted',)
     inlines = [ProductImageInline, ProductVariantsInline, ProductLangInline]
     prepopulated_fields = {'slug': ('title',)}
-    exclude = ("wishlisted ",)
+    readonly_fields = ('image_tag', 'wishlisted', "amount", "minamount", "variant")
+    exclude = ("wishlisted ", "amount ", "minamount ", "variant ")
 
 
 class CommentAdmin(admin.ModelAdmin):

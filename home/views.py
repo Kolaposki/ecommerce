@@ -377,7 +377,7 @@ def brand_products(request, id, slug):
 
     context = {'products': products,
                'catdata': brand_data, "is_brand": True}
-    return render(request, 'shop-category.html', context)
+    return render(request, 'shop-brands.html', context)
 
 
 def search(request):

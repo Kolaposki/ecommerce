@@ -106,14 +106,15 @@ class Product(models.Model):
     # description = models.TextField(max_length=255)
     image = models.ImageField(upload_to='images/', null=False)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    # amount = models.IntegerField(default=0)
-    # minamount = models.IntegerField(default=3)
+    amount = models.IntegerField(default=0, blank=True, null=True)  # Only needed when ordering
+    minamount = models.IntegerField(default=3, blank=True, null=True)  # Only needed when ordering
 
     sex = models.CharField(max_length=6, choices=SEX, default='Unisex', blank=False, null=False)
     variant = models.CharField(max_length=10, choices=VARIANTS, default='None')
     detail = RichTextUploadingField()
     slug = models.SlugField(null=False, unique=True)
     status = models.CharField(max_length=10, choices=STATUS, default='True')
+    color = models.CharField(max_length=20, blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     discount_percentage = models.IntegerField(default=0)
@@ -164,6 +165,10 @@ class Images(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = "Images"
+        verbose_name = "Images"
 
 
 class Comment(models.Model):

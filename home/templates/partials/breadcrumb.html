@@ -4,13 +4,15 @@
      style="background-image: url({% static 'images/banner/store_bg.jpg' %});">
     <div class="container">
         <div class="breadcrumb-content">
-            <h2 style="color: white;">{{ category|upper }} PRODUCTS</h2>
             {% if is_brand %}
+                <h2 style="color: white;">{{ catdata|upper }} PRODUCTS</h2>
                 <ul>
                     <li><a href="{% url 'new_home' %}" style="color: white;">Home</a></li>
                     <li class="active" style="color: white;">Brand</li>
                 </ul>
             {% else %}
+                <h2 style="color: white;">{{ category|upper }} PRODUCTS</h2>
+
                 <ul>
                     <li><a href="{% url 'new_home' %}" style="color: white;">Home</a></li>
                     <li class="active" style="color: white;">Category</li>

@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -159,6 +160,36 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': None,
     },
+}
+
+JAZZMIN_SETTINGS = {
+    # title of the window
+    'site_title': 'Quicky Admin',
+
+    # Title on the brand, and the login screen (19 chars max)
+    'site_header': 'Quicky',
+
+    # square logo to use for your site, must be present in static files, used for favicon and brand on top left
+    'site_logo': 'images/logo.png',
+
+    # Welcome text on the login screen
+    'welcome_sign': 'Welcome to Quicky. Get your fashion products in a jiffy.',
+
+    # Copyright on the footer
+    'copyright': 'Quicky INC',
+
+    # The model admin to search from the search bar, search bar omitted if excluded
+    'search_model': 'auth.User',
+
+    # Field name on user model that contains avatar image
+    'user_avatar': 'UserProfile.image',
+
+    # Whether to display the side menu
+    'show_sidebar': True,
+
+    # Whether to aut expand the menu
+    'navigation_expanded': True,
+
 }
 
 ###################################
