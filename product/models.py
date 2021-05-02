@@ -99,7 +99,7 @@ class Product(models.Model):
     title = models.CharField(max_length=150)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # many to one relation with Category
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)  # many to one relation with Brand
-    # wishlisted = models.BooleanField(default=False, blank=True, null=True)
+    wishlisted = models.BooleanField(default=False, blank=True, null=True)
     for_kids = models.BooleanField(default=False, blank=True, null=True)
     tags = TaggableManager(blank=True)
     keywords = models.CharField(max_length=255)
@@ -289,3 +289,11 @@ class Wishlist(models.Model):
     class Meta:
         verbose_name_plural = "Wishlists"
         verbose_name = "Wishlist"
+
+    def save(self, *args, **kwargs):
+        Product.objects.filter(pk=self.product.pk).update(wishlisted=True)
+        super(Wishlist, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        Product.objects.filter(pk=self.product.pk).update(wishlisted=False)
+        super(Image, self).delete(*args, **kwargs)
