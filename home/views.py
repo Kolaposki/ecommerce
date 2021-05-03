@@ -373,6 +373,25 @@ def kids_products(request):
     return render(request, 'shop-category.html', context)
 
 
+def unisex_products(request):
+    defaultlang = settings.LANGUAGE_CODE[0:2]
+    currentlang = request.LANGUAGE_CODE[0:2]
+    products = Product.objects.filter(sex='Unisex')
+    if defaultlang != currentlang:
+        try:
+            products = Product.objects.raw(
+                'SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                'FROM product_product as p '
+                'LEFT JOIN product_productlang as l '
+                'ON p.id = l.product_id '
+                'WHERE p.category_id=%s and l.lang=%s', [id, currentlang])
+        except:
+            pass
+
+    context = {'products': products, "is_brand": False, 'category': 'Unisex'}
+    return render(request, 'shop-category.html', context)
+
+
 def brand_products(request, id, slug):
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
@@ -396,21 +415,17 @@ def brand_products(request, id, slug):
 
 
 def search(request):
-    if request.method == 'POST':  # check post
-        form = SearchForm(request.POST)
+    if request.method == 'GET':  # check method
+        form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']  # get form input data
-            catid = form.cleaned_data['catid']
-            if catid == 0:
-                products = Product.objects.filter(
-                    title__icontains=query)  # SELECT * FROM product WHERE title LIKE '%query%'
-            else:
-                products = Product.objects.filter(title__icontains=query, category_id=catid)
 
-            category = Category.objects.all()
+            products = Product.objects.filter(
+                title__icontains=query)  # SELECT * FROM product WHERE title LIKE '%query%'
+            total = products.count()
             context = {'products': products, 'query': query,
-                       'category': category}
-            return render(request, 'search_products.html', context)
+                       'total': total}
+            return render(request, 'search_results.html', context)
 
     return HttpResponseRedirect('/')
 

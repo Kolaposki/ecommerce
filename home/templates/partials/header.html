@@ -429,8 +429,8 @@
                 <a href="#" class="btn-close"><i class="zmdi zmdi-close"></i></a>
                 <!-- Begin Offcanvas Search Area -->
                 <div class="offcanvas-search">
-                    <form action="#" class="hm-searchbox">
-                        <input type="text" placeholder="Search for item...">
+                    <form method="GET" action="{% url 'search' %}" class="hm-searchbox">
+                        <input type="text" name="query" placeholder="Search for product...">
                         <button class="search_btn" type="submit"><i
                                 class="zmdi zmdi-search"></i></button>
                     </form>

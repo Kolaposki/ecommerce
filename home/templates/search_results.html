@@ -2,23 +2,17 @@
 
 {% load currency %}
 {% block wrapper_type %} "wrapper-boxed_layout" {% endblock wrapper_type %}
-<title>{% block title %} {{ catdata.title }} Products {% endblock %}</title>
+<title>{% block title %} Search | Quicky {% endblock %}</title>
 
 {% block body %}
-
-    <!-- Begin Quicky's Breadcrumb Area -->
-{#    {% include 'partials/breadcrumb.html' with name= "{{  catdata.title}}" %}#}
-    {% include 'partials/breadcrumb.html' %}
-    <!-- Quicky's Breadcrumb Area End Here` -->
 
     <div class="error404-area">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 ml-auto mr-auto text-center">
                     <div class="search-error-wrapper">
-                        <h2>{{ catdata.title }}</h2>
-                        <img class="img-fluid" src="{{ catdata.image.url }}" alt="{{ catdata.title }}">
-                        <p class="short_desc mt-3">{{ catdata.description }}</p>
+                        <h2>Search related to: <strong>{{ query }}</strong> </h2>
+                        <p class="short_desc mt-3">Total found: {{ total }}</p>
                     </div>
                 </div>
             </div>
@@ -29,11 +23,7 @@
     <div class="quicky-content_wrapper pt-90 pb-100">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 order-2 order-lg-1">
-                    {% include 'partials/category_sidebar.html' %}
-                </div>
-
-                <div class="col-lg-9 order-1 order-lg-2">
+                <div class="col-lg-12">
                     <div class="shop-toolbar">
                         {% include 'partials/category_toolbar.html' %}
                     </div>

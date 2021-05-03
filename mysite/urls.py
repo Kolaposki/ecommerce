@@ -51,6 +51,7 @@ urlpatterns += i18n_patterns(
     path('men', views.men_products, name='men_products'),
     path('women', views.women_products, name='women_products'),
     path('kids', views.kids_products, name='kids_products'),
+    path('unisex', views.unisex_products, name='unisex_products'),
     path('category/<int:id>/<slug:slug>', views.category_products, name='category_products'),
     path('brand/<int:id>/<slug:slug>', views.brand_products, name='brand_products'),
     path('product/<int:id>/<slug:slug>/', views.product_detail, name='product_detail'),
