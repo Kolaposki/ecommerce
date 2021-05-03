@@ -41,10 +41,10 @@
                                href="/product/{{ rs.product.id }}/{{ rs.product.slug }}">{{ rs.product }}</a>
                             <span class="product-item_quantity">{{ rs.quantity }} x
                                 {% if rs.product.discount_price %}
-                                    {{ rs.product.discount_price|currency:request.session.currency }}
-                                    {{ request.session.currency }}
-                                    {% else %}{{ rs.product.price|currency:request.session.currency }}
-                                    {{ request.session.currency }}
+                                    {{ rs.product.discount_price|currency:curr }}
+                                    {{ curr }}
+                                    {% else %}{{ rs.product.price|currency:curr }}
+                                    {{ curr }}
                                 {% endif %}
                             </span>
                         </div>
@@ -55,7 +55,7 @@
         </div>
         <div class="minicart-item_total">
             <span>Subtotal</span>
-            <span class="ammount">{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+            <span class="ammount">{{ total|currency:curr }} {{ curr }}</span>
         </div>
         <div class="minicart-btn_area">
             <a href="{% url 'shopcart' %}" class="quicky-btn-2 quicky-btn_fullwidth square-btn">Minicart</a>

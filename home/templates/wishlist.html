@@ -57,10 +57,10 @@
                                         <td class="quicky-product-price"><span
                                                 class="amount">
                                             {% if rs.product.discount_price %}
-                                                {{ rs.product.discount_price|currency:request.session.currency }}
-                                                {{ request.session.currency }}
-                                                {% else %}{{ rs.product.price|currency:request.session.currency }}
-                                                {{ request.session.currency }}
+                                                {{ rs.product.discount_price|currency:curr }}
+                                                {{ curr }}
+                                                {% else %}{{ rs.product.price|currency:curr }}
+                                                {{ curr }}
                                             {% endif %}
 
                                         </span>

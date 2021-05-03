@@ -60,10 +60,10 @@
                                         <td class="quicky-product-price"><span
                                                 class="amount">
                                             {% if rs.product.discount_price %}
-                                                {{ rs.product.discount_price|currency:request.session.currency }}
-                                                {{ request.session.currency }}
-                                                {% else %}{{ rs.product.price|currency:request.session.currency }}
-                                                {{ request.session.currency }}
+                                                {{ rs.product.discount_price|currency:curr }}
+                                                {{ curr }}
+                                                {% else %}{{ rs.product.price|currency:curr }}
+                                                {{ curr }}
                                             {% endif %}
 
                                         </span>
@@ -83,16 +83,16 @@
                                                 {% load myapptags %}
 
                                                 {% if rs.product.discount_price %}
-                                                    {% multiply rs.product.discount_price quantity %} {{ request.session.currency }}
-                                                    {% else %}{% multiply rs.product.price quantity %} {{ request.session.currency }}
+                                                    {% multiply rs.product.discount_price quantity %} {{ curr }}
+                                                    {% else %}{% multiply rs.product.price quantity %} {{ curr }}
                                                 {% endif %}
                                                 {##}
                                                 {#                                                {% if rs.product.variant == 'None' %}#}
-                                                {#                                                    {{ rs.amount|currency:request.session.currency }}#}
-                                                {#                                                    {{ request.session.currency }}#}
+                                                {#                                                    {{ rs.amount|currency:curr }}#}
+                                                {#                                                    {{ curr }}#}
                                                 {#                                                {% else %}#}
-                                                {#                                                    {{ rs.varamount|currency:request.session.currency }}#}
-                                                {#                                                    {{ request.session.currency }}#}
+                                                {#                                                    {{ rs.varamount|currency:curr }}#}
+                                                {#                                                    {{ curr }}#}
                                                 {#                                                {% endif %}#}
                                             {% endwith %}</span></td>
                                     </tr>
@@ -101,36 +101,17 @@
                                 </tbody>
                             </table>
                         </div>
-
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="coupon-all">
-                                    <div class="coupon">
-                                        <input id="coupon_code" class="input-text" name="coupon_code" value=""
-                                               placeholder="Coupon code" type="text">
-                                        <input class="button mt-xxs-30" name="apply_coupon" value="Apply coupon"
-                                               type="submit">
-                                    </div>
-                                    <div class="coupon2">
-                                        <input class="button" name="update_cart" value="Update cart" type="submit">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
                         <div class="row">
                             <div class="col-md-5 ml-auto">
                                 <div class="cart-page-total">
                                     <h2>Cart totals</h2>
                                     <ul>
                                         <li>Subtotal
-                                            <span>{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                            <span>{{ total|currency:curr }} {{ curr }}</span>
                                         </li>
                                         <li>Shipping <span>Free Shipping</span></li>
                                         <li>Total
-                                            <span>{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                            <span>{{ total|currency:curr }} {{ curr }}</span>
                                         </li>
                                     </ul>
                                     <a href="{% url 'orderproduct' %}">Proceed to checkout</a>

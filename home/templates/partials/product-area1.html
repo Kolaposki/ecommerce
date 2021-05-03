@@ -73,7 +73,7 @@
                                                 href="single-product.html">{{ rs.title }}</a></h3>
                                         <div class="price-box">
                                             <span class="old-price">$80.00</span>
-                                            <span class="new-price">{{ rs.price|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                            <span class="new-price">{{ rs.price|currency:curr }} {{ curr }}</span>
                                         </div>
                                         <div class="review-area d-flex justify-content-between align-items-center">
                                             <div class="rating-box">
@@ -177,7 +177,7 @@
                                                 href="single-product.html">{{ rs.title }}</a></h3>
                                         <div class="price-box">
                                             <span class="old-price">$80.00</span>
-                                            <span class="new-price">{{ rs.price|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                            <span class="new-price">{{ rs.price|currency:curr }} {{ curr }}</span>
                                         </div>
                                         <div class="review-area d-flex justify-content-between align-items-center">
                                             <div class="rating-box">

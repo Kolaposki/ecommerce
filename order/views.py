@@ -111,7 +111,8 @@ def add_to_cart_ajax(request):
 
         html = render_to_string(
             template_name="partials/header_minicart.html",
-            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id)}
+            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id),
+                     'curr': request.session['currency']}
         )
 
         count = all_shop_cart.count()
@@ -136,7 +137,7 @@ def shopcart(request):
 
     context = {'shopcart': shopcart,
                'category': category,
-               'total': total,
+               'total': total, 'curr': request.session['currency']
                }
     return render(request, 'shopcart.html', context)
 
@@ -166,7 +167,8 @@ def delete_from_cart_ajax(request):
 
         html = render_to_string(
             template_name="partials/header_minicart.html",
-            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id)}
+            context={'shopcart': all_shop_cart, 'total': total, "request": request, "user_pk": int(current_user.id),
+                     'curr': request.session['currency']}
         )
 
         count = all_shop_cart.count()
@@ -234,7 +236,8 @@ def orderproduct(request):
             ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
             request.session['cart_items'] = 0
             messages.success(request, "Your Order has been completed. Thank you ")
-            return render(request, 'complete.html', {'ordercode': ordercode, 'category': category})
+            return render(request, 'complete.html',
+                          {'ordercode': ordercode, 'category': category, 'curr': request.session['currency']})
         else:
             messages.warning(request, form.errors)
             return HttpResponseRedirect("/order/orderproduct")
@@ -245,6 +248,6 @@ def orderproduct(request):
                'category': category,
                'total': total,
                'form': form,
-               'profile': profile,
+               'profile': profile, 'curr': request.session['currency']
                }
     return render(request, 'checkout.html', context)

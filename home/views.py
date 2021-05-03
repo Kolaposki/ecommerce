@@ -34,22 +34,26 @@ def thanks(request):
     return render(request, 'thanks.html')
 
 
+def checkout_index(request):
+    return render(request, 'checkout-index.html')
+
+
 @csrf_exempt
 def checkout(request):
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
-            'price': 'price_1H06q8IdX0gthvYPWudV1aw1',
+            'price': 'price_1ImcaIIsXDTZe0qryUZLEz2a',
             'quantity': 1,
         }],
         mode='payment',
         success_url=request.build_absolute_uri(reverse('thanks')) + '?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url=request.build_absolute_uri(reverse('index')),
+        cancel_url=request.build_absolute_uri(reverse('checkout_index')),
     )
 
     return JsonResponse({
         'session_id': session.id,
-        'stripe_public_key': settings.STRIPE_PUBLIC_KEY
+        'stripe_public_key': settings.STRIPE_PUBLISHABLE_KEY
     })
 
 
@@ -112,7 +116,7 @@ def index(request):
                'page': page,
                'products_slider': products_slider,
                'products_latest': products_latest,
-               'products_picked': products_picked,
+               'products_picked': products_picked, 'curr': request.session['currency']
                # 'category':category
                }
 
@@ -120,9 +124,12 @@ def index(request):
 
 
 def wishlist(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
     products = Wishlist.objects.filter(user_id=request.user.id)
 
-    context = {'wishlists': products, }
+    context = {'wishlists': products, 'curr': request.session['currency']}
     return render(request, 'wishlist.html', context)
 
 
@@ -219,7 +226,7 @@ def new_home(request):
                'products_picked': products_picked,
                'shopcart': shop_cart,
                'category': category,
-               'total': total,
+               'total': total, 'curr': request.session['currency']
                }
 
     return render(request, 'home.html', context)
@@ -276,6 +283,9 @@ def contactus(request):
 
 
 def category_products(request, id, slug):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     catdata = Category.objects.get(pk=id)
@@ -293,11 +303,14 @@ def category_products(request, id, slug):
         catdata = CategoryLang.objects.get(category_id=id, lang=currentlang)
 
     context = {'products': products,
-               'catdata': catdata}
+               'catdata': catdata, 'curr': request.session['currency']}
     return render(request, 'shop-category.html', context)
 
 
 def men_products(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     products = Product.objects.filter(sex='Male')
@@ -331,11 +344,14 @@ def men_products(request):
             pass
 
     context = {'products': products, "is_brand": False, 'category': 'Men', 'next_page': next_page, 'total': total,
-               'top_tags': top_tags, 'top_brands': top_brands}
+               'top_tags': top_tags, 'top_brands': top_brands, 'curr': request.session['currency']}
     return render(request, 'shop-category.html', context)
 
 
 def women_products(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     products = Product.objects.filter(sex='Female')
@@ -350,11 +366,14 @@ def women_products(request):
         except:
             pass
 
-    context = {'products': products, "is_brand": False, 'category': 'Women'}
+    context = {'products': products, "is_brand": False, 'category': 'Women', 'curr': request.session['currency']}
     return render(request, 'shop-category.html', context)
 
 
 def kids_products(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     products = Product.objects.filter(for_kids=True)
@@ -369,11 +388,16 @@ def kids_products(request):
         except:
             pass
 
-    context = {'products': products, "is_brand": False, 'category': 'Kids'}
+    context = {'products': products, "is_brand": False, 'category': 'Kids', 'curr': request.session['currency']}
     return render(request, 'shop-category.html', context)
 
 
 def unisex_products(request):
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
+    print("currncy :", request.session['currency'])
+
     defaultlang = settings.LANGUAGE_CODE[0:2]
     currentlang = request.LANGUAGE_CODE[0:2]
     products = Product.objects.filter(sex='Unisex')
@@ -388,7 +412,7 @@ def unisex_products(request):
         except:
             pass
 
-    context = {'products': products, "is_brand": False, 'category': 'Unisex'}
+    context = {'products': products, "is_brand": False, 'category': 'Unisex', 'curr': request.session['currency']}
     return render(request, 'shop-category.html', context)
 
 
@@ -410,7 +434,7 @@ def brand_products(request, id, slug):
         brand_data = CategoryLang.objects.get(category_id=id, lang=currentlang)
 
     context = {'products': products,
-               'catdata': brand_data, "is_brand": True}
+               'catdata': brand_data, "is_brand": True, 'curr': request.session['currency']}
     return render(request, 'shop-brands.html', context)
 
 
@@ -424,7 +448,7 @@ def search(request):
                 title__icontains=query)  # SELECT * FROM product WHERE title LIKE '%query%'
             total = products.count()
             context = {'products': products, 'query': query,
-                       'total': total}
+                       'total': total, 'curr': request.session['currency']}
             return render(request, 'search_results.html', context)
 
     return HttpResponseRedirect('/')
@@ -473,7 +497,7 @@ def product_detail(request, id, slug):
     images = Images.objects.filter(product_id=id)
     comments = Comment.objects.filter(product_id=id, status='True')
     context = {'product': product, 'category': category,
-               'images': images, 'comments': comments,
+               'images': images, 'comments': comments, 'curr': request.session['currency']
                }
     if product.variant != "None":  # Product have variants
         if request.method == 'POST':  # if we select color
@@ -528,6 +552,13 @@ def selectcurrency(request):
     lasturl = request.META.get('HTTP_REFERER')
     if request.method == 'POST':  # check post
         request.session['currency'] = request.POST['currency']
+    return HttpResponseRedirect(lasturl)
+
+
+def change_currency(request, c_type):
+    lasturl = request.META.get('HTTP_REFERER')
+    print("c_type: ", c_type)
+    request.session['currency'] = c_type
     return HttpResponseRedirect(lasturl)
 
 

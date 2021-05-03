@@ -10,13 +10,6 @@
     </tr>
     </thead>
     <tbody>
-    <tr class="cart_item">
-        <td class="cart-product-name"> Vestibulum suscipit<strong
-                class="product-quantity">
-            × 1</strong></td>
-        <td class="cart-product-total"><span class="amount">£165.00</span></td>
-    </tr>
-
     {% for rs in shopcart %}
         <tr class="cart_item">
             <td class="cart-product-name">{{ rs.product }}<strong
@@ -24,9 +17,9 @@
                 × {{ rs.quantity }}</strong></td>
             <td class="cart-product-total"><span class="amount">$
                 {% if rs.product.variant == 'None' %}
-                    {{ rs.amount|currency:request.session.currency }} {{ request.session.currency }}
+                    {{ rs.amount|currency:curr }} {{ curr }}
                 {% else %}
-                    {{ rs.varamount|currency:request.session.currency }} {{ request.session.currency }}
+                    {{ rs.varamount|currency:curr }} {{ curr }}
                 {% endif %}</span></td>
         </tr>
     {% endfor %}
@@ -35,7 +28,7 @@
     <tfoot>
     <tr class="cart-subtotal">
         <th>Cart Subtotal</th>
-        <td><span class="amount">{{ total|currency:request.session.currency }} {{ request.session.currency }}</span>
+        <td><span class="amount">{{ total|currency:curr }} {{ curr }}</span>
         </td>
     </tr>
     <tr class="cart-subtotal">
@@ -46,7 +39,7 @@
     <tr class="order-total">
         <th>Order Total</th>
         <td><strong><span
-                class="amount">{{ total|currency:request.session.currency }} {{ request.session.currency }}</span></strong>
+                class="amount">{{ total|currency:curr }} {{ curr }}</span></strong>
         </td>
     </tr>
     </tfoot>

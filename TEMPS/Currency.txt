@@ -34,4 +34,4 @@
 	Save language and Currency form
 	
 	Show Price debend on currency
-	{{ rs.price|currency:request.session.currency }}
+	{{ rs.price|currency:curr }}

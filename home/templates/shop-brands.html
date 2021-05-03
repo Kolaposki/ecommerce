@@ -100,11 +100,11 @@
                                                 </h3>
                                                 <div class="price-box">
                                                     <span class="new-price ml-0"> {% if rs.discount_price %}
-                                                        {{ rs.discount_price|currency:request.session.currency }}
-                                                        {{ request.session.currency }}
+                                                        {{ rs.discount_price|currency:curr }}
+                                                        {{ curr }}
                                                     {% else %}
-                                                        {{ rs.price|currency:request.session.currency }}
-                                                        {{ request.session.currency }}
+                                                        {{ rs.price|currency:curr }}
+                                                        {{ curr }}
                                                     {% endif %} </span>
                                                 </div>
                                                 <div class="review-area d-flex justify-content-between align-items-center">
@@ -137,12 +137,12 @@
                                                 </h6>
                                                 <div class="price-box">
                                                     {% if rs.discount_price %}
-                                                        <span class="old-price">{{ rs.price|currency:request.session.currency }} {{ request.session.currency }}</span>
-                                                        <span class="new-price">{{ rs.discount_price|currency:request.session.currency }}
-                                                            {{ request.session.currency }}</span>
+                                                        <span class="old-price">{{ rs.price|currency:curr }} {{ curr }}</span>
+                                                        <span class="new-price">{{ rs.discount_price|currency:curr }}
+                                                            {{ curr }}</span>
                                                     {% else %}
                                                         <span class="old-price"></span>
-                                                        <span class="new-price">{{ rs.price|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                                        <span class="new-price">{{ rs.price|currency:curr }} {{ curr }}</span>
                                                     {% endif %}
 
                                                 </div>

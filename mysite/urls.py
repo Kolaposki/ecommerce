@@ -28,6 +28,7 @@ from django.utils.translation import gettext_lazy as _
 urlpatterns = [
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
     path('selectcurrency', views.selectcurrency, name='selectcurrency'),
+    path('change_currency/<str:c_type>/', views.change_currency, name='change_currency'),
     path('savelangcur', views.savelangcur, name='savelangcur'),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
@@ -42,6 +43,11 @@ urlpatterns += i18n_patterns(
     path('order/', include('order.urls')),
     path('user/', include('user.urls'), name='user'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+
+    path('checkout/', views.checkout, name='checkout'),
+    path('checkout_index/', views.checkout_index, name='checkout_index'),
+    path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),
+    path('thanks/', views.thanks, name='thanks'),
 
 
     path(_('about/'), views.aboutus, name='aboutus'),
