@@ -43,9 +43,8 @@
                                 </thead>
                                 <tbody>
                                 {% for rs in wishlists %}
-                                    <tr>
-                                        <td class="quicky-product-remove"><a href=""
-                                                                             onclick="return confirm('Delete ! Are you sure?')"><i
+                                    <tr class="wishlist-parent" data-pk="{{ rs.pk }}">
+                                        <td class="quicky-product-remove"><a class="remove-wish" href="#"><i
                                                 class="zmdi zmdi-close"
                                                 title="Remove"></i></a></td>
                                         <td class="quicky-product-thumbnail"><a href="javascript:void(0)"><img
@@ -68,7 +67,7 @@
                                         </td>
                                         <td class="quicky-product-stock-status"><span class="in-stock">in stock</span>
                                         </td>
-                                        <td class="quicky-cart_btn"><a href="javascript:void(0)">add to cart</a></td>
+                                        <td class="quicky-cart_btn"><a href="#">add to cart</a></td>
                                     </tr>
 
                                 {% endfor %}

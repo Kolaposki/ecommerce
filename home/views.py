@@ -121,7 +121,6 @@ def index(request):
 
 def wishlist(request):
     products = Wishlist.objects.filter(user_id=request.user.id)
-    print("wishlist_pro: ", products)
 
     context = {'wishlists': products, }
     return render(request, 'wishlist.html', context)
@@ -158,6 +157,22 @@ def wishlist_actions_ajax(request):
         data_dict = {'count': count, 'wishlisted': False}
         return JsonResponse(data=data_dict, safe=False)
 
+    else:
+        return HttpResponseBadRequest('Unrecognized request')
+
+
+@login_required(login_url='/login')  # Check login
+def delete_from_wishlist_ajax(request):
+    if request.method == 'GET' and request.is_ajax():
+
+        current_user = request.user  # Access User Session information
+        product_id = request.GET['product_id']
+        Wishlist.objects.filter(id=product_id).delete()
+
+        count = Wishlist.objects.filter(user_id=int(current_user.id)).count()
+
+        data_dict = {'count': count}
+        return JsonResponse(data=data_dict, safe=False)
     else:
         return HttpResponseBadRequest('Unrecognized request')
 

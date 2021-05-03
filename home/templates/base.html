@@ -329,6 +329,38 @@
 
 <script>
     let REMOVED_PRODUCT_FLAG;
+    $('a.remove-wish').click(function (e) {
+        e.preventDefault()
+        console.log('wishlist click')
+
+        let parent = $(this).parents("tr.wishlist-parent")
+        console.log('parent: ', parent)
+        let product_pk = parent[0].getAttribute("data-pk")
+        parent.remove()
+
+        $.ajax({
+            type: "GET",
+            url: '/home/delete_from_wishlist_ajax/',
+            data: {
+                product_id: product_pk
+            },
+            success: function (response) {
+
+                showNotification("Removed from wishlist", "success");
+                console.log("wishlisted success ", product_pk);
+                console.log("response ", response);
+                $("p#totalWish").text(response.count)
+
+            },
+            error: function (e) {
+                showNotification("Error occured when wishlisting", "danger");
+                console.log("Error ocuured when wishlisting");
+                console.log(e)
+            }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+        });
+    });
+
     $('.actionWishlistBtn').click(function (e) {
         e.preventDefault()
         console.log('wishlist click')
@@ -341,7 +373,6 @@
 
         $child.toggleClass("zmdi zmdi-favorite");
         $child.toggleClass("zmdi zmdi-favorite-outline");
-
 
         let parent = $(this).parents("div[data-pk]")[0]
         console.log('product_pk: ', parent.getAttribute("data-pk"))
