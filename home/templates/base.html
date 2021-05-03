@@ -413,6 +413,42 @@
         });
     });
 
+    $('.wishlist-addcart').click(function (e) {
+        e.preventDefault()
+        console.log('Added to cart click')
+        let parent = $(this).parents("tr.wishlist-parent")[0]
+        console.log('parent: ', parent)
+        let product_pk = parent.getAttribute("data-product-pk")
+        console.log('product_pk: ',product_pk)
+
+        // parent.remove()
+
+        $.ajax({
+            type: "GET",
+            url: '/order/add_to_cart_ajax/',
+            data: {
+                product_id: product_pk
+            },
+            success: function (response) {
+                console.log("Added to cart ", product_pk);
+                console.log("response ", response);
+                showNotification("Added to cart", "success");
+
+                $('#minicartSection').html(response.html_from_view)
+                $("p#totalPrice").text(response.count)
+
+            },
+            error: function (e) {
+                showNotification("Error ocuured when adding to cart", "danger");
+                console.log("Error ocuured when liking contact");
+                console.log(e)
+            }, global: false,     // this makes sure ajaxStart is not triggered and prevent showing preloader
+
+        });
+
+    });
+
+
     $('.addToCartBtn').click(function (e) {
         e.preventDefault()
         console.log('Added to cart click')

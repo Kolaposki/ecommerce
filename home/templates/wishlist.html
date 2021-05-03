@@ -43,7 +43,7 @@
                                 </thead>
                                 <tbody>
                                 {% for rs in wishlists %}
-                                    <tr class="wishlist-parent" data-pk="{{ rs.pk }}">
+                                    <tr class="wishlist-parent" data-pk="{{ rs.pk }}" data-product-pk="{{ rs.product.pk }}">
                                         <td class="quicky-product-remove"><a class="remove-wish" href="#"><i
                                                 class="zmdi zmdi-close"
                                                 title="Remove"></i></a></td>
@@ -67,7 +67,7 @@
                                         </td>
                                         <td class="quicky-product-stock-status"><span class="in-stock">in stock</span>
                                         </td>
-                                        <td class="quicky-cart_btn"><a href="#">add to cart</a></td>
+                                        <td class="quicky-cart_btn"><a class="wishlist-addcart" href="#">add to cart</a></td>
                                     </tr>
 
                                 {% endfor %}
