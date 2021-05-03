@@ -45,7 +45,15 @@
     <link rel="stylesheet" href="{% static 'css/plugins/timecircles.css' %}">
 
     <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        li.nocompare, .nocompare {
+            display: none !important;
+        }
 
+        i.icon-refresh, li > a > i.icon-refresh, a > i.icon-refresh, a[href="compare.html"] {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body class="template-color-2 font-family-01">
@@ -229,7 +237,8 @@
                                     <ul>
                                         <li><a href="cart.html" class="add-to_cart">Add To Cart</a></li>
                                         <li><a href="wishlist.html"><i class="zmdi zmdi-favorite-outline"></i></a></li>
-                                        <li><a href="compare.html"><i class="zmdi zmdi-shuffle"></i></a></li>
+                                        <li class="nocompare"><a href="compare.html"><i
+                                                class="zmdi zmdi-shuffle"></i></a></li>
                                     </ul>
                                 </div>
                                 <div class="quicky-tag-line">
@@ -419,7 +428,7 @@
         let parent = $(this).parents("tr.wishlist-parent")[0]
         console.log('parent: ', parent)
         let product_pk = parent.getAttribute("data-product-pk")
-        console.log('product_pk: ',product_pk)
+        console.log('product_pk: ', product_pk)
 
         // parent.remove()
 
