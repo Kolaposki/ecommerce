@@ -46,11 +46,11 @@
 
     <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
-        li.nocompare, .nocompare {
+        li.nocompare, .nocompare, .quick-view-btn, li.quick-view-btn {
             display: none !important;
         }
 
-        i.icon-refresh, li > a > i.icon-refresh, a > i.icon-refresh, a[href="compare.html"] {
+        i.icon-magnifier, i.icon-refresh, li > a > i.icon-refresh, a > i.icon-refresh, a[href="compare.html"] {
             display: none !important;
         }
     </style>
@@ -403,12 +403,19 @@
         let parent = $(this).parents("div[data-pk]")[0]
         console.log('product_pk: ', parent.getAttribute("data-pk"))
         let product_pk = parent.getAttribute("data-pk")
+        let quantityInput = $('#quantityInput').val()
+
+        console.log("quantityInput ", quantityInput);
+        let new_quantity = 0;
+        if (parseInt(quantityInput) > 1) {
+            new_quantity = quantityInput
+        }
 
         $.ajax({
             type: "GET",
             url: '/order/add_to_cart_ajax/',
             data: {
-                product_id: product_pk
+                product_id: product_pk, new_quantity: new_quantity
             },
             success: function (response) {
                 console.log("Added to cart ", product_pk);

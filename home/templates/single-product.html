@@ -24,22 +24,17 @@
                                     "swipe": false,
                                     "asNavFor": ".sp-img_slider-nav"
                                     }'>
-                                <div class="single-slide red zoom">
-                                    <img src="{% static 'images/product/large-size/1.jpg' %}"
-                                         alt="Quicky's Product Image">
+                                <div class="single-slide main zoom">
+                                    <img src="{{ product.image.url }}"
+                                         alt="{{ product.title }}">
                                 </div>
-                                <div class="single-slide orange zoom">
-                                    <img src="{% static 'images/product/large-size/2.jpg' %}"
-                                         alt="Quicky's Product Image">
-                                </div>
-                                <div class="single-slide brown zoom">
-                                    <img src="{% static 'images/product/large-size/3.jpg' %}"
-                                         alt="Quicky's Product Image">
-                                </div>
-                                <div class="single-slide umber zoom">
-                                    <img src="{% static 'images/product/large-size/4.jpg' %}"
-                                         alt="Quicky's Product Image">
-                                </div>
+
+                                {% for rs in images %}
+                                    <div class="single-slide zoom color-{{ forloop.counter }}">
+                                        <img src="{{ rs.image.url }}" alt="{{ product.title }}">
+                                    </div>
+                                {% endfor %}
+
                             </div>
                             <div class="sp-img_slider-nav slick-slider-nav quicky-element-carousel arrow-style arrow-sm_size arrow-day_color"
                                  data-slick-options='{
@@ -55,31 +50,25 @@
                                             {"breakpoint":768, "settings": {"slidesToShow": 3}},
                                             {"breakpoint":575, "settings": {"slidesToShow": 2}}
                                         ]'>
-                                <div class="single-slide red">
-                                    <img src="{% static 'images/product/large-size/1.jpg' %}"
-                                         alt="Quicky's Product Thumnail">
+                                <div class="single-slide main">
+                                    <img src="{{ product.image.url }}"
+                                         alt="{{ product.title }}">
                                 </div>
-                                <div class="single-slide orange">
-                                    <img src="{% static 'images/product/large-size/2.jpg' %}"
-                                         alt="Quicky's Product Thumnail">
-                                </div>
-                                <div class="single-slide brown">
-                                    <img src="{% static 'images/product/large-size/3.jpg' %}"
-                                         alt="Quicky's Product Thumnail">
-                                </div>
-                                <div class="single-slide umber">
-                                    <img src="{% static 'images/product/large-size/4.jpg' %}"
-                                         alt="Quicky's Product Thumnail">
-                                </div>
+
+                                {% for rs in images %}
+                                    <div class="single-slide color-{{ forloop.counter }}">
+                                        <img src="{{ rs.image.url }}" alt="{{ product.title }}">
+                                    </div>
+                                {% endfor %}
+
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <div class="sp-content ml-lg-4">
+                        <div class="sp-content ml-lg-4 " id="singleProduct" data-pk="{{ product.pk }}">
                             <div class="sp-heading">
                                 <h3><a href="javascript:void(0)">{{ product.title }}</a></h3>
                             </div>
-                                                    <span class="reference">Reference: demo_1</span>
                             <div class="rating-box">
                                 <i class="fa fa-star{% if product.avaregereview < 1 %}-o empty{% endif %}"></i>
                                 <i class="fa fa-star{% if product.avaregereview < 2 %}-o empty{% endif %}"></i>
@@ -91,47 +80,75 @@
 
                             <div class="sp-essential_stuff">
                                 <ul>
-                                    <li>Category <a href="javascript:void(0)">{{ product.category }}</a></li>
-                                    <li>Product Code: <a href="javascript:void(0)">Product 16</a></li>
-                                    <li>Reward Points: <a href="javascript:void(0)">100</a></li>
+                                    <li>Category <a
+                                            href="{% url 'category_products' product.category.pk product.category %}">{{ product.category }}</a>
+                                    </li>
+                                    <li>Brand: <a
+                                            href="{% url 'brand_products' product.brand.pk product.brand %}">{{ product.brand }}</a>
+                                    </li>
                                     <li>Availability: <a href="javascript:void(0)">In Stock</a></li>
-                                    <li>EX Tax: <a href="javascript:void(0)"><span>$453.35</span></a></li>
-                                    <li>Price in reward points: <a href="javascript:void(0)">400</a></li>
                                 </ul>
                             </div>
 
                             <div class="product-size_box">
                                 <span>Size</span>
-                                <select class="myniceselect nice-select">
-                                    <option value="1">S</option>
-                                    <option value="2">M</option>
-                                    <option value="3">L</option>
-                                    <option value="4">XL</option>
-                                </select>
+                                {% if product.category == 'shoe' %}
+                                    <select class="myniceselect nice-select">
+                                        <option value="1">30</option>
+                                        <option value="2">35</option>
+                                        <option value="3">40</option>
+                                        <option value="4">45</option>
+                                    </select>
+                                {% elif product.category == 'Accessories' or  product.category == 'Jewellery' %}
+                                    <div></div>
+                                {% else %}
+                                    <select class="myniceselect nice-select">
+                                        <option value="1">S</option>
+                                        <option value="2">M</option>
+                                        <option value="3">L</option>
+                                        <option value="4">XL</option>
+                                    </select>
+                                {% endif %}
+
                             </div>
                             <div class="quantity">
                                 <label>Quantity</label>
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" value="1" type="text">
+                                    <input class="cart-plus-minus-box" id="quantityInput" value="1" type="text">
                                     <div class="dec qtybutton"><i class="zmdi zmdi-chevron-down"></i></div>
                                     <div class="inc qtybutton"><i class="zmdi zmdi-chevron-up"></i></div>
                                 </div>
                             </div>
                             <div class="qty-btn_area">
                                 <ul>
-                                    <li><a class="qty-cart_btn" href="cart.html">Add To Cart</a></li>
-                                    <li><a class="qty-wishlist_btn" href="wishlist.html" data-toggle="tooltip"
-                                           title="Add To Wishlist"><i class="zmdi zmdi-favorite-outline"></i></a>
+                                    <li><a class="qty-cart_btn addToCartBtn" href="#">Add To Cart</a></li>
+                                    <li>
+                                        {% if product.wishlisted %}
+                                            <a href="#" class="qty-wishlist_btn actionWishlistBtn"
+                                               data-wishlisted="true"
+                                               data-toggle="tooltip"
+                                               title="Remove from Wishlist" >
+                                                <i class="zmdi zmdi-favorite"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="#" class="qty-wishlist_btn actionWishlistBtn"
+                                               data-toggle="tooltip"
+                                               title="Add To Wishlist">
+                                                <i class="zmdi zmdi-favorite-outline"></i>
+                                            </a>
+                                        {% endif %}
                                     </li>
-                                    <li><a class="qty-compare_btn" href="compare.html" data-toggle="tooltip"
+                                    <li>
+
+                                        <a class="qty-compare_btn" href="compare.html" data-toggle="tooltip"
                                            title="Compare This Product"><i class="zmdi zmdi-shuffle"></i></a></li>
                                 </ul>
                             </div>
                             <div class="quicky-tag-line">
                                 <h6>Tags:</h6>
-                                <a href="javascript:void(0)">clock,</a>
-                                <a href="javascript:void(0)">watch,</a>
-                                <a href="javascript:void(0)">bag</a>
+                                {% for tag in all_tags %}
+                                    <a href="javascript:void(0)">{{ tag }}</a>
+                                {% endfor %}
                             </div>
                             <div class="social-link-4 square-style align-left border-style">
                                 <ul>
@@ -174,12 +191,12 @@
     <!-- Product Tab Area Two End Here -->
 
     <!-- Begin Product Area Seven -->
-    <div class="product-area-13 pt-95">
+    <div class="product-area-14 pt-95">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h3 class="heading">Best Seller</h3>
+                        <h3 class="heading">By same brand</h3>
                         <div class="section-icon"></div>
                     </div>
                 </div>
@@ -200,237 +217,110 @@
                             }}
                         ]'>
 
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/25.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <span class="sticker red-color">Sale</span>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Abstract Design Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$70.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
+                        {% for b_product in same_brand %}
+
+                            {% if product.pk == b_product.pk %}
+
+                            {% else %}
+                                <div class="product-item">
+                                    <div class="single-product" data-pk="{{ b_product.pk }}">
+                                        <div class="product-img">
+                                            <a href="single-product.html">
+                                                <img src="{{ b_product.image.url }}"
+                                                     alt="{{ b_product.title }}">
+                                            </a>
+
+                                            <div class="add-actions">
                                                 <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
+                                                    <li class="quick-view-btn" data-toggle="modal"
+                                                        data-target="#exampleModalCenter"><a href="javascript:void(0)"
+                                                                                             data-toggle="tooltip"
+                                                                                             data-placement="top"
+                                                                                             title="Quick View"><i
+                                                            class="icon-magnifier"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        {% if b_product.wishlisted %}
+                                                            <a href="#" class="actionWishlistBtn" data-wishlisted="true"
+                                                               data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Remove from Wishlist">
+                                                                <i class="zmdi zmdi-favorite"></i>
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="#" class="actionWishlistBtn"
+                                                               data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Add To Wishlist">
+                                                                <i class="zmdi zmdi-favorite-outline"></i>
+                                                            </a>
+                                                        {% endif %}
+                                                    </li>
+                                                    <li class="nocompare"><a href="compare.html" data-toggle="tooltip"
+                                                                             data-placement="top"
+                                                                             title="Add To Compare"><i
+                                                            class="icon-refresh"></i></a>
+                                                    </li>
+                                                    <li><a href="#" class="addToCartBtn" data-toggle="tooltip"
+                                                           data-placement="top"
+                                                           title="Add To cart"><i class="icon-bag"></i></a>
+                                                    </li>
                                                 </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content bg-snow">
+                                            <div class="product-desc_info">
+                                                <div class="manufacture-product_top">
+                                                    <span>{{ b_product.brand }} </span>
+                                                </div>
+                                                <h3 class="product-name"><a
+                                                        href="{% url 'product_detail' b_product.id b_product.slug %}">{{ b_product.title }}</a>
+                                                </h3>
+                                                <div class="price-box">
+                                                    {% if rs.discount_price %}
+                                                        <span class="old-price">{{ b_product.price|currency:curr }} {{ curr }}</span>
+                                                        <span class="new-price">{{ b_product.discount_price|currency:curr }}
+                                                            {{ curr }}</span>
+                                                    {% else %}
+                                                        <span class="old-price"></span>
+                                                        <span class="new-price">{{ b_product.price|currency:curr }} {{ curr }}</span>
+                                                    {% endif %}
+
+                                                </div>
+
+                                                <div class="review-area d-flex justify-content-between align-items-center">
+                                                    <div class="rating-box gamboge-color">
+                                                        <ul>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/26.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                    <span class="sticker-2">-16%</span>
-                                    <div class="add-actions hover-right_side">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Fency Design Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$45.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/27.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Wooden Style Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$65.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/25.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <span class="sticker red-color">Sale</span>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Abstract Design Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$70.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            {% endif %}
+
+
+                        {% endfor %}
+
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Product Area Seven End Here -->
-
-    <!-- Begin Product Area Seven -->
+    <!-- Product Area Seven End Here --><!-- Begin Product Area Seven -->
     <div class="product-area-14 pt-95">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h3 class="heading">Special Product</h3>
+                        <h3 class="heading">Products you might like</h3>
                         <div class="section-icon"></div>
                     </div>
                 </div>
@@ -451,222 +341,97 @@
                             }}
                         ]'>
 
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/29.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                    <span class="sticker-2">-16%</span>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Fancy Style Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$39.28</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
+                        {% for b_product in might_like %}
+
+                            {% if product.pk == b_product.pk %}
+
+                            {% else %}
+                                <div class="product-item">
+                                    <div class="single-product" data-pk="{{ b_product.pk }}">
+                                        <div class="product-img">
+                                            <a href="single-product.html">
+                                                <img src="{{ b_product.image.url }}"
+                                                     alt="{{ b_product.title }}">
+                                            </a>
+
+                                            <div class="add-actions">
                                                 <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
+                                                    <li class="quick-view-btn" data-toggle="modal"
+                                                        data-target="#exampleModalCenter"><a href="javascript:void(0)"
+                                                                                             data-toggle="tooltip"
+                                                                                             data-placement="top"
+                                                                                             title="Quick View"><i
+                                                            class="icon-magnifier"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        {% if b_product.wishlisted %}
+                                                            <a href="#" class="actionWishlistBtn" data-wishlisted="true"
+                                                               data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Remove from Wishlist">
+                                                                <i class="zmdi zmdi-favorite"></i>
+                                                            </a>
+                                                        {% else %}
+                                                            <a href="#" class="actionWishlistBtn"
+                                                               data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Add To Wishlist">
+                                                                <i class="zmdi zmdi-favorite-outline"></i>
+                                                            </a>
+                                                        {% endif %}
+                                                    </li>
+                                                    <li class="nocompare"><a href="compare.html" data-toggle="tooltip"
+                                                                             data-placement="top"
+                                                                             title="Add To Compare"><i
+                                                            class="icon-refresh"></i></a>
+                                                    </li>
+                                                    <li><a href="#" class="addToCartBtn" data-toggle="tooltip"
+                                                           data-placement="top"
+                                                           title="Add To cart"><i class="icon-bag"></i></a>
+                                                    </li>
                                                 </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content bg-snow">
+                                            <div class="product-desc_info">
+                                                <div class="manufacture-product_top">
+                                                    <span>{{ b_product.brand }} </span>
+                                                </div>
+                                                <h3 class="product-name"><a
+                                                        href="{% url 'product_detail' b_product.id b_product.slug %}">{{ b_product.title }}</a>
+                                                </h3>
+                                                <div class="price-box">
+                                                    {% if rs.discount_price %}
+                                                        <span class="old-price">{{ b_product.price|currency:curr }} {{ curr }}</span>
+                                                        <span class="new-price">{{ b_product.discount_price|currency:curr }}
+                                                            {{ curr }}</span>
+                                                    {% else %}
+                                                        <span class="old-price"></span>
+                                                        <span class="new-price">{{ b_product.price|currency:curr }} {{ curr }}</span>
+                                                    {% endif %}
+
+                                                </div>
+
+                                                <div class="review-area d-flex justify-content-between align-items-center">
+                                                    <div class="rating-box gamboge-color">
+                                                        <ul>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                            <li><i class="icon-star"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/32.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Funny Design Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$45.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/30.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <div class="add-actions">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Moonstar Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$58.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="single-product">
-                                <div class="product-img">
-                                    <a href="single-product.html">
-                                        <img src="{% static 'images/product/medium-size/33.jpg' %}"
-                                             alt="Quicky's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                    <span class="sticker-2">Sale</span>
-                                    <div class="add-actions hover-right_side">
-                                        <ul>
-                                            <li class="quick-view-btn" data-toggle="modal"
-                                                data-target="#exampleModalCenter"><a href="javascript:void(0)"
-                                                                                     data-toggle="tooltip"
-                                                                                     data-placement="top"
-                                                                                     title="Quick View"><i
-                                                    class="icon-magnifier"></i></a>
-                                            </li>
-                                            <li><a href="wishlist.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Wishlist"><i class="icon-heart"></i></a>
-                                            </li>
-                                            <li  class="nocompare"><a href="compare.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To Compare"><i class="icon-refresh"></i></a>
-                                            </li>
-                                            <li><a href="cart.html" data-toggle="tooltip" data-placement="top"
-                                                   title="Add To cart"><i class="icon-bag"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-content bg-snow">
-                                    <div class="product-desc_info">
-                                        <div class="manufacture-product_top">
-                                            <span>Clock</span>
-                                        </div>
-                                        <h3 class="product-name"><a href="single-product.html">Beauty Style Clock</a>
-                                        </h3>
-                                        <div class="price-box">
-                                            <span class="new-price ml-0">$74.00</span>
-                                        </div>
-                                        <div class="review-area d-flex justify-content-between align-items-center">
-                                            <div class="rating-box gamboge-color">
-                                                <ul>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                    <li><i class="icon-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            {% endif %}
+
+
+                        {% endfor %}
+
 
                     </div>
                 </div>

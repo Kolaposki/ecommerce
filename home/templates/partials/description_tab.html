@@ -34,33 +34,11 @@
                                 {% endif %}
 
                                 <form class="form-horizontal" id="form-review"
-                                      action="/product/addcomment/{{ product.id }}" method="post">
+                                      action="{% url 'addcomment' product.id %}" method="post">
                                     {% csrf_token %}
 
                                     <div id="review">
 
-                                        <table class="table table-striped table-bordered">
-                                            <tbody>
-                                            <tr>
-                                                <td style="width: 50%;"><strong>Customer</strong></td>
-                                                <td class="text-right">20/02/20</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <p>Good product! Thank you very much</p>
-                                                    <div class="rating-box">
-                                                        <ul>
-                                                            <li><i class="zmdi zmdi-star"></i></li>
-                                                            <li><i class="zmdi zmdi-star"></i></li>
-                                                            <li><i class="zmdi zmdi-star"></i></li>
-                                                            <li><i class="zmdi zmdi-star"></i></li>
-                                                            <li><i class="zmdi zmdi-star"></i></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
                                         {% for rs in comments %}
 
                                             <table class="table table-striped table-bordered">
@@ -94,7 +72,10 @@
                                     <div class="form-group required">
                                         <div class="col-sm-12 p-0">
                                             <label class="control-label">Share your opinion</label>
-                                            <textarea class="review-textarea plr-10" name="comment"
+                                            <input type="text" class="form-control mb-3" placeholder="subject"
+                                                   name="subject">
+                                            <textarea class="review-textarea plr-10" placeholder="comment"
+                                                      name="comment"
                                                       id="con_message"></textarea>
                                             {#                                            <div class="help-block"><span class="text-danger">Note:</span> HTML is#}
                                             {#                                                not#}
@@ -107,6 +88,14 @@
                                             <div class="your-opinion">
                                                 <label>Your Rating</label>
                                                 <div class="rating-box">
+                                                    <select class="myniceselect nice-select" name="rate">
+                                                        <option value="5">5</option>
+                                                        <option value="4">4</option>
+                                                        <option value="3">4</option>
+                                                        <option value="2">2</option>
+                                                        <option value="1">1</option>
+                                                    </select>
+{#                                                    <input type="hidden" value="5" name="rate">#}
                                                     <ul>
                                                         <li><i class="zmdi zmdi-star"></i></li>
                                                         <li><i class="zmdi zmdi-star"></i></li>

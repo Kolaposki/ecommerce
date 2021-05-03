@@ -480,6 +480,11 @@ def product_detail(request, id, slug):
     category = Category.objects.all()
 
     product = Product.objects.get(pk=id)
+    all_tags = product.tags.all()
+
+    brand_data = Brand.objects.get(pk=product.brand.pk)
+    same_brand = Product.objects.filter(brand_id=brand_data)[:3]
+    might_like = Product.objects.all().order_by('?')[:3]  # Random selected 3 products
 
     if defaultlang != currentlang:
         try:
@@ -496,8 +501,8 @@ def product_detail(request, id, slug):
 
     images = Images.objects.filter(product_id=id)
     comments = Comment.objects.filter(product_id=id, status='True')
-    context = {'product': product, 'category': category,
-               'images': images, 'comments': comments, 'curr': request.session['currency']
+    context = {'product': product, 'category': category, 'same_brand': same_brand, 'might_like': might_like,
+               'images': images, 'comments': comments, 'all_tags': all_tags, 'curr': request.session['currency']
                }
     if product.variant != "None":  # Product have variants
         if request.method == 'POST':  # if we select color

@@ -12,9 +12,10 @@ def index(request):
 
 def addcomment(request, id):
     url = request.META.get('HTTP_REFERER')  # get last url
-    # return HttpResponse(url)
     if request.method == 'POST':  # check post
         form = CommentForm(request.POST)
+        print("form: ", form)
+
         if form.is_valid():
             data = Comment()  # create relation with model
             data.subject = form.cleaned_data['subject']
@@ -27,6 +28,8 @@ def addcomment(request, id):
             data.save()  # save data to table
             messages.success(request, "Your review has ben sent. Thank you for your interest.")
             return HttpResponseRedirect(url)
+        else:
+            print("Notvalid: ", form.errors)
 
     return HttpResponseRedirect(url)
 

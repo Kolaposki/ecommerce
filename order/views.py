@@ -80,6 +80,9 @@ def add_to_cart_ajax(request):
         current_user = request.user  # Access User Session information
         print("current_user: ", current_user)
         product_id = request.GET['product_id']
+        new_quantity = request.GET['new_quantity']
+        print("new_quantity: ", new_quantity)
+
         product = Product.objects.get(pk=product_id)
 
         checkinproduct = ShopCart.objects.filter(product_id=product_id,
@@ -91,13 +94,19 @@ def add_to_cart_ajax(request):
 
         if control == 1:  # Update  shopcart
             data = ShopCart.objects.get(product_id=product_id, user=current_user)
-            data.quantity += 1
+            if new_quantity:
+                data.quantity += int(new_quantity)
+            else:
+                data.quantity += 1
             data.save()  #
         else:  # Insert to Shopcart
             data = ShopCart()  #
             data.user_id = current_user.id
             data.product_id = product_id
-            data.quantity = 1
+            if new_quantity:
+                data.quantity = int(new_quantity)
+            else:
+                data.quantity = 1
             data.variant_id = None
             data.save()
 
