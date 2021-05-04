@@ -7,6 +7,7 @@ from mptt.admin import DraggableMPTTAdmin
 from product import models
 from product.models import Category, Product, Images, Comment, Color, Size, Variants, ProductLang, CategoryLang, Brand, \
     Wishlist
+from django.contrib.auth.models import Group
 
 
 class CategoryLangInline(admin.TabularInline):
@@ -160,14 +161,16 @@ class CategoryLangugaeAdmin(admin.ModelAdmin):
     list_filter = ['lang']
 
 
+admin.site.unregister(Group)
+# admin.site.unregister(Color)
+# admin.site.unregister(CategoryLang)
+# admin.site.unregister(Variants)
+# admin.site.unregister(Size)
+# admin.site.unregister(ProductLang)
+
 admin.site.register(Category, CategoryAdmin2)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Images, ImagesAdmin)
-admin.site.register(Color, ColorAdmin)
-admin.site.register(Size, SizeAdmin)
-admin.site.register(Variants, VariantsAdmin)
-admin.site.register(ProductLang, ProductLangugaeAdmin)
-admin.site.register(CategoryLang, CategoryLangugaeAdmin)

@@ -44,6 +44,7 @@ urlpatterns += i18n_patterns(
     path('user/', include('user.urls'), name='user'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
+    path('create_product_stripe/<str:total>/<str:currency>/', views.create_product_stripe, name='create_product_stripe'),
     path('checkout/', views.checkout, name='checkout'),
     path('checkout_index/', views.checkout_index, name='checkout_index'),
     path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),

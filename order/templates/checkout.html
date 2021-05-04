@@ -28,86 +28,49 @@
 
                             {% include 'partials/checkout_table.html' %}
                         </div>
-                        <div class="payment-method">
-                            <div class="payment-accordion">
-                                <div id="accordion">
-                                    <div class="card">
-                                        <div class="card-header" id="#payment-1">
-                                            <h5 class="panel-title">
-                                                <a href="javascript:void(0)" class="" data-toggle="collapse"
-                                                   data-target="#collapseOne" aria-expanded="true"
-                                                   aria-controls="collapseOne">
-                                                    Direct Bank Transfer.
-                                                </a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                                            <div class="card-body">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order
-                                                    ID as the payment
-                                                    reference. Your order won’t be shipped until the funds have
-                                                    cleared in
-                                                    our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="#payment-2">
-                                            <h5 class="panel-title">
-                                                <a href="javascript:void(0)" class="collapsed"
-                                                   data-toggle="collapse" data-target="#collapseTwo"
-                                                   aria-expanded="false" aria-controls="collapseTwo">
-                                                    Cheque Payment
-                                                </a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                                            <div class="card-body">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order
-                                                    ID as the payment
-                                                    reference. Your order won’t be shipped until the funds have
-                                                    cleared in
-                                                    our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="#payment-3">
-                                            <h5 class="panel-title">
-                                                <a href="javascript:void(0)" class="collapsed"
-                                                   data-toggle="collapse" data-target="#collapseThree"
-                                                   aria-expanded="false" aria-controls="collapseThree">
-                                                    PayPal
-                                                </a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseThree" class="collapse" data-parent="#accordion">
-                                            <div class="card-body">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order
-                                                    ID as the payment
-                                                    reference. Your order won’t be shipped until the funds have
-                                                    cleared in
-                                                    our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-{#                                <div class="order-button-payment">#}
-{#                                    <input value="Place order" type="submit">#}
-{#                                </div>#}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
     <!-- Quicky's Checkout Area End Here -->
 
 
 {% endblock body %}
+{% block js %}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+
+        const buy_now_button = document.querySelector('#buy_now_btn2')
+
+        var stripe = Stripe('pk_test_51ImcEtIsXDTZe0qrkTdn4T8wobJ59Uyd19DscNeElhiFmYjy8T3jfiXG1YPrOjKiG0zEFFZy3FQpMYKnTRFzwfKI00Cxzxz4zd');
+
+        buy_now_button.addEventListener('click', event => {
+            event.preventDefault()
+            console.log("Buy now clicked")
+            fetch("{% url 'create_product_stripe' total curr %}")
+                .then((result) => {
+                    {#console.log("result.json(): ", result.json())#}
+
+                    return result.json()
+                })
+                .then((data) => {
+                    //var stripe = Stripe(data.stripe_public_key);
+                    console.log("data: ", data)
+                    stripe.redirectToCheckout({
+                        // Make the id field from the Checkout Session creation API response
+                        // available to this file, so you can provide it as parameter here
+                        // instead of the {{session_id}} placeholder.
+                        sessionId: data.session_id
+                    }).then(function (result) {
+                        // If `redirectToCheckout` fails due to a browser or network
+                        // error, display the localized error message to your customer
+                        // using `result.error.message`.
+                                            console.log("error occured: ", result.error.message)
+
+                    });
+                })
+        })
+    </script>
+
+{% endblock js %}

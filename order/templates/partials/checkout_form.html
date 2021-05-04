@@ -2,7 +2,7 @@
 {% load currency %}
 
 
-<form action="" method="post">
+<form action="{% url 'orderproduct' %}" method="post">
     {% csrf_token %}
     <div class="checkbox-form">
         <h3>Billing Details</h3>
@@ -93,6 +93,6 @@
     </div>
 
     <div class="order-button-payment">
-        <input value="Place order" type="submit">
+        <input value="Place order" id="buy_now_btn2" type="submit">
     </div>
 </form>

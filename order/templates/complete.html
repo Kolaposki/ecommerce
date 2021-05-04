@@ -23,17 +23,16 @@
             <div class="col-lg-8 ml-auto mr-auto text-center">
                 <div class="search-error-wrapper">
                     <h2 style="color: #0cbc15;">ORDER COMPLETED</h2>
-                    <h2>Dear {{ user.first_name }} {{ user.last_name }}</h2>
+                    <h2>Dear {{ request.user.first_name }} {{ request.user.last_name }}</h2>
 
                     <p class="short_desc">The order was completed successfully</p>
-                    <p class="short_desc">Order Code : {{ ordercode }}</p>
                     <p class="short_desc">Thank You</p>
 
                     <hr>
                     <hr>
 
                     <div class="btn-ps_center"></div>
-                    <a href="index.html" class="error-btn">Back To Home Page</a>
+                    <a href="{% url 'new-home' %}" class="error-btn">Back To Home Page</a>
                 </div>
             </div>
         </div>

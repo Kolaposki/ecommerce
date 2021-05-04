@@ -31,7 +31,9 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def thanks(request):
-    return render(request, 'thanks.html')
+    context = {'curr': request.session['currency']}
+
+    return render(request, 'thanks.html', context=context)
 
 
 def checkout_index(request):
@@ -86,6 +88,54 @@ def stripe_webhook(request):
         print(line_items)
 
     return HttpResponse(status=200)
+
+
+@csrf_exempt
+def create_product_stripe(request, total, currency):
+    print("total stripe: ", total)
+    print("currency stripe: ", currency)
+
+    product = stripe.Product.create(
+        name='Quicky E-commerce Purchase', description="A lovely purchase from quicky"
+    )
+
+    total = int(round(float(total)))
+
+    if str(currency).lower() == 'tan':
+        print("currency is tan so mul by 10")
+        total = total * 10
+
+    print("final total: ", total)
+    price = stripe.Price.create(
+        product=str(product.id),
+        unit_amount=total,
+        currency='usd',
+    )
+
+    stripe.api_key = "sk_test_51ImcEtIsXDTZe0qrUBjD5ksdWOhw7AtXzcOzMlZ9hjPiPaMFULzRC82Gr9R9AKa53eBhnoYmWcGYlls5EM6YSYBq005qsbzedY"
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price': str(price.id),
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse('thanks')) + '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url=request.build_absolute_uri(reverse('checkout_index')),
+    )
+    current_user = request.user
+
+    shop_cart = ShopCart.objects.filter(user_id=current_user.id)
+
+    ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
+    request.session['cart_items'] = 0
+    messages.success(request, "Your Order has been completed. Thank you ")
+
+    return JsonResponse({
+        'session_id': session.id,
+        'stripe_public_key': settings.STRIPE_PUBLISHABLE_KEY
+    })
 
 
 def index(request):

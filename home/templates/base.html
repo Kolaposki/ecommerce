@@ -274,7 +274,8 @@
 
 <!-- Main JS -->
 <script src="{% static 'js/main.js' %}"></script>
-
+{% block js %}
+{% endblock js %}
 <script>
     let REMOVED_PRODUCT_FLAG;
     $('a.remove-wish').click(function (e) {

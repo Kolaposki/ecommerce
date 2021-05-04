@@ -203,7 +203,6 @@ def orderproduct(request):
         # return HttpResponse(request.POST.items())
         if form.is_valid():
             # Send Credit card to bank,  If the bank responds ok, continue, if not, show the error
-            # ..............
 
             data = Order()
             data.first_name = form.cleaned_data['first_name']  # get product quantity from form
