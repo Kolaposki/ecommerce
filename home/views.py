@@ -257,6 +257,7 @@ def new_home(request):
     products_slider = Product.objects.all().order_by('id')[:3]  # first 3 products
 
     products_picked = Product.objects.all().order_by('?')[:3]  # Random selected 3 products
+    brand_products = Product.objects.filter(brand_id=7)  # default language
 
     category = Category.objects.all()
     current_user = request.user  # Access User Session information
@@ -274,6 +275,7 @@ def new_home(request):
                'products_slider': products_slider,
                'products_latest': products_latest,
                'products_picked': products_picked,
+               'brand_products': brand_products,
                'shopcart': shop_cart,
                'category': category,
                'total': total, 'curr': request.session['currency']
@@ -378,9 +380,9 @@ def men_products(request):
     top_tags = Product.tags.most_common()[:7]
 
     if total > 21:
-        next_page = True
+        next_page = False
 
-    products = products[0:21]
+    # products = products[0:21]
 
     if defaultlang != currentlang:
         try:
